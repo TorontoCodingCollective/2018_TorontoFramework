@@ -7,10 +7,11 @@ import robot.Robot;
 /**
  *
  */
-public class ExampleCommand extends Command {
-	public ExampleCommand() {
+public class DefaultChassisCommand extends Command {
+	
+	public DefaultChassisCommand() {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.exampleSubsystem);
+		requires(Robot.chassisSubsystem);
 	}
 
 	// Called just before this Command runs the first time
@@ -21,6 +22,11 @@ public class ExampleCommand extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+		
+		double speed = Robot.oi.getSpeed();
+		
+		Robot.chassisSubsystem.setSpeed(speed);
+		
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
