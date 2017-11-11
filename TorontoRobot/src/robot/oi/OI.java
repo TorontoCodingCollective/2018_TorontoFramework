@@ -1,4 +1,4 @@
-package robot;
+package robot.oi;
 
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -8,11 +8,15 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	
-	private Joystick stick = new Joystick(1);
+	private GameController gameController = new GameController(1);
 	
 	
 	public double getSpeed() {
-		return - stick.getRawAxis(1);
+		return - gameController.getStickAxis(Stick.LEFT, Axis.Y);
+	}
+	
+	public double getTurn() {
+		return gameController.getStickAxis(Stick.LEFT, Axis.X);
 	}
 	
 	

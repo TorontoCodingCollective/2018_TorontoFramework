@@ -24,8 +24,24 @@ public class DefaultChassisCommand extends Command {
 	protected void execute() {
 		
 		double speed = Robot.oi.getSpeed();
+		double turn  = Robot.oi.getTurn();
 		
-		Robot.chassisSubsystem.setSpeed(speed);
+		double leftSpeed = 0;
+		double rightSpeed = 0;
+		
+		// If the speed is low, then turn
+		if (Math.abs(speed) < 0.2 && Math.abs(turn) > 0.2) {
+			leftSpeed = turn;
+			rightSpeed = -turn;
+		}
+		
+		// If the turn is low, then go based on speed
+		if (Math.abs(speed) > 0.2 && Math.abs(turn) < 0.2) {
+			leftSpeed = speed;
+			rightSpeed = speed;
+		}
+		
+		Robot.chassisSubsystem.setSpeed(leftSpeed, rightSpeed);
 		
 	}
 
