@@ -39,11 +39,17 @@ public class ChassisSubsystem extends Subsystem {
 		double leftMotorPIDOutput = 
 				leftPid.calculate(speedSetpoint, leftNormalizedSpeed);
 		
+		double rightNormalizedSpeed = rightEncoder.getRate() /
+				RobotConst.MAX_DRIVE_ENCODER_SPEED;
+		
+		double rightMotorPIDOutput = 
+				rightPid.calculate(speedSetpoint, rightNormalizedSpeed);
+		
 		SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
-		SmartDashboard.putNumber("Right Speed", speedSetpoint);
+		SmartDashboard.putNumber("Right Speed", rightMotorPIDOutput);
 
 		leftMotor.set(leftMotorPIDOutput);
-		rightMotor.set(speedSetpoint);
+		rightMotor.set(rightMotorPIDOutput);
 	}
 
 	public void setSpeed(double leftSpeedSetpoint, double rightSpeedSetpoint) {
@@ -54,11 +60,17 @@ public class ChassisSubsystem extends Subsystem {
 		double leftMotorPIDOutput = 
 				leftPid.calculate(leftSpeedSetpoint, leftNormalizedSpeed);
 		
+		double rightNormalizedSpeed = rightEncoder.getRate() /
+				RobotConst.MAX_DRIVE_ENCODER_SPEED;
+		
+		double rightMotorPIDOutput = 
+				rightPid.calculate(rightSpeedSetpoint, rightNormalizedSpeed);
+		
 		SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
-		SmartDashboard.putNumber("Right Speed", rightSpeedSetpoint);
+		SmartDashboard.putNumber("Right Speed", rightMotorPIDOutput);
 
 		leftMotor.set(leftMotorPIDOutput);
-		rightMotor.set(rightSpeedSetpoint);
+		rightMotor.set(rightMotorPIDOutput);
 	}
 
 	public void updatePeriodic() {
