@@ -12,11 +12,11 @@ public class OI {
 	
 	
 	public double getSpeed() {
-		return - gameController.getStickAxis(Stick.LEFT, Axis.Y);
+		return - gameController.getAxis(Stick.LEFT, Axis.Y);
 	}
 	
 	public double getTurn() {
-		return gameController.getStickAxis(Stick.RIGHT, Axis.X);
+		return gameController.getAxis(Stick.RIGHT, Axis.X);
 	}
 	
 	
