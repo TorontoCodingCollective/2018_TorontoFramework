@@ -23,6 +23,13 @@ public class DefaultChassisCommand extends Command {
 	@Override
 	protected void execute() {
 		
+		if (Robot.oi.getPidOn()) {
+			Robot.chassisSubsystem.setPidActive(true);
+		}
+		if (Robot.oi.getPidOff()) {
+			Robot.chassisSubsystem.setPidActive(false);
+		}
+		
 		double speed = Robot.oi.getSpeed();
 		double turn  = Robot.oi.getTurn();
 		

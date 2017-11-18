@@ -19,6 +19,13 @@ public class OI {
 		return gameController.getAxis(Stick.RIGHT, Axis.X);
 	}
 	
+	public boolean getPidOff() {
+		return gameController.getButton(Button.X);
+	}
+	
+	public boolean getPidOn() {
+		return gameController.getButton(Button.Y);
+	}
 	
 	
 	//// CREATING BUTTONS
