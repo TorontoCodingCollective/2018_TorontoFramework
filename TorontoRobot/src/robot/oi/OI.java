@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	
-	private GameController gameController = new GameController(1);
+	private GameController_Logitech gameController = new GameController_Logitech(1);
 	
 	
 	public double getSpeed() {
@@ -16,7 +16,7 @@ public class OI {
 	}
 	
 	public double getTurn() {
-		return gameController.getStickAxis(Stick.LEFT, Axis.X);
+		return gameController.getStickAxis(Stick.RIGHT, Axis.X);
 	}
 	
 	
