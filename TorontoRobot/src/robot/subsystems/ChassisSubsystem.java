@@ -20,35 +20,57 @@ public class ChassisSubsystem extends Subsystem {
 	Encoder leftEncoder = new Encoder(0, 1);
 	Encoder rightEncoder = new Encoder(2, 3, RobotConst.INVERTED);
 	
+	SpeedPID leftPid = new SpeedPID(1.0);
+	SpeedPID rightPid = new SpeedPID(1.0);
+	
 	public void init() {
 		rightMotor.setInverted(true);
 	}
 	
 	public void initDefaultCommand() {
-		
 		setDefaultCommand(new DefaultChassisCommand());
 	}
 	
-	public void setSpeed(double speed) {
-		leftMotor.set(speed);
-		rightMotor.set(speed);
+	public void setSpeed(double speedSetpoint) {
 		
-		SmartDashboard.putNumber("Left Speed", speed);
-		SmartDashboard.putNumber("Right Speed", speed);
+		double leftNormalizedSpeed = leftEncoder.getRate() /
+				RobotConst.MAX_DRIVE_ENCODER_SPEED;
+		
+		double leftMotorPIDOutput = 
+				leftPid.calculate(speedSetpoint, leftNormalizedSpeed);
+		
+		SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
+		SmartDashboard.putNumber("Right Speed", speedSetpoint);
+
+		leftMotor.set(leftMotorPIDOutput);
+		rightMotor.set(speedSetpoint);
 	}
 
-	public void setSpeed(double leftSpeed, double rightSpeed) {
-		leftMotor.set(leftSpeed);
-		rightMotor.set(rightSpeed);
+	public void setSpeed(double leftSpeedSetpoint, double rightSpeedSetpoint) {
 
-		SmartDashboard.putNumber("Left Speed", leftSpeed);
-		SmartDashboard.putNumber("Right Speed", rightSpeed);
+		double leftNormalizedSpeed = leftEncoder.getRate() /
+				RobotConst.MAX_DRIVE_ENCODER_SPEED;
+		
+		double leftMotorPIDOutput = 
+				leftPid.calculate(leftSpeedSetpoint, leftNormalizedSpeed);
+		
+		SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
+		SmartDashboard.putNumber("Right Speed", rightSpeedSetpoint);
+
+		leftMotor.set(leftMotorPIDOutput);
+		rightMotor.set(rightSpeedSetpoint);
 	}
 
 	public void updatePeriodic() {
+		
+		
 
 		SmartDashboard.putNumber("Left Encoder Raw", leftEncoder.getRaw());
+		SmartDashboard.putNumber("Left Encoder Speed", leftEncoder.getRate());
 		SmartDashboard.putNumber("Right Encoder Raw", rightEncoder.getRaw());
+		SmartDashboard.putNumber("Right Encoder Speed", rightEncoder.getRate());
+		SmartDashboard.putData("LeftPid", leftPid);
+		SmartDashboard.putData("RightPid", rightPid);
 	}
 	
 }
