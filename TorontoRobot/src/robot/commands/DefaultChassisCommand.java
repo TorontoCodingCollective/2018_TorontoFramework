@@ -1,7 +1,7 @@
 package robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.command.Scheduler;
 import robot.Robot;
 
 /**
@@ -28,6 +28,10 @@ public class DefaultChassisCommand extends Command {
 		}
 		if (Robot.oi.getPidOff()) {
 			Robot.chassisSubsystem.setPidActive(false);
+		}
+		
+		if (Robot.oi.getForwardThrust()) {
+			Scheduler.getInstance().add(new ForwardThrustCommand());
 		}
 		
 		double speed = Robot.oi.getSpeed();

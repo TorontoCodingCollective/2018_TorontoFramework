@@ -27,6 +27,10 @@ public class OI {
 		return gameController.getButton(Button.Y);
 	}
 	
+	public boolean getForwardThrust() {
+		return gameController.getButton(Button.A);
+	}
+	
 	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

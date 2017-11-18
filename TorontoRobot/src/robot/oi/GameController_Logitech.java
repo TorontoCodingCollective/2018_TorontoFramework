@@ -43,6 +43,7 @@ public class GameController_Logitech extends GameController {
 		case Y:
 			return getRawButton(4);
 		case A:
+			return getRawButton(1);
 		case B:
 		}
 		return false;

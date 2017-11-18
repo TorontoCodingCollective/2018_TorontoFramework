@@ -1,5 +1,6 @@
 package robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
@@ -23,6 +24,8 @@ public class ChassisSubsystem extends Subsystem {
 	SpeedPID leftPid = new SpeedPID(1.0);
 	SpeedPID rightPid = new SpeedPID(1.0);
 	
+	DigitalInput frontLimitSwitch = new DigitalInput(4);
+	
 	boolean pidActive = true;
 	
 	public void init() {
@@ -35,6 +38,11 @@ public class ChassisSubsystem extends Subsystem {
 	
 	public void setPidActive(boolean pidEnable) {
 		pidActive = pidEnable;
+	}
+	
+	public boolean atFrontLimit() {
+		// Limit switch is true when NOT activated.
+		return !frontLimitSwitch.get();
 	}
 	
 	public void setSpeed(double speedSetpoint) {
