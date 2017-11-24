@@ -31,6 +31,7 @@ public abstract class DriveSubsystem extends Subsystem {
 	 * The drive subsystem has pids that are initialized to 
 	 * disabled.  Use the {@link #enableSpeedPids()} and {@link #disableSpeedPids()}
 	 * routines to set the PIDs on and off
+	 * 
 	 * @param leftMotor that implements the SpeedController interface
 	 * @param leftMotorInverted {@literal true} if the motor is 
 	 * inverted, {@literal false} otherwise
@@ -43,7 +44,7 @@ public abstract class DriveSubsystem extends Subsystem {
 	 * @param rightEncoder encoder for the right motor
 	 * @param rightEncoderInverted {@literal true} if the encoder is 
 	 * inverted, {@literal false} otherwise
-	 * @param p Default Proportional gain for the motor speed pid.  The 
+	 * @param kP Default Proportional gain for the motor speed pid.  The 
 	 * speed PIDs are displayed on the SmartDashboard and can be 
 	 * adjusted through that interface
 	 * @param maxEncoderSpeed the max loaded robot encoder rate used
@@ -58,7 +59,7 @@ public abstract class DriveSubsystem extends Subsystem {
 			boolean         leftEncoderInverted,
 			Encoder         rightEncoder,
 			boolean         rightEncoderInverted,
-			double          p,
+			double          kP,
 			double          maxEncoderSpeed) {
 		
 		this.leftMotor = leftMotor;
@@ -80,8 +81,8 @@ public abstract class DriveSubsystem extends Subsystem {
 			rightEncoder.setReverseDirection(true);
 		}
 		
-		leftSpeedPid  = new SpeedPID(p, maxEncoderSpeed);
-		rightSpeedPid = new SpeedPID(p, maxEncoderSpeed);
+		leftSpeedPid  = new SpeedPID(kP, maxEncoderSpeed);
+		rightSpeedPid = new SpeedPID(kP, maxEncoderSpeed);
 		
 		disableSpeedPids();
 	}

@@ -11,7 +11,7 @@ import robot.commands.DefaultChassisCommand;
 /**
  *
  */
-public class ChassisSubsystem2 extends DriveSubsystem {
+public class ChassisSubsystem2 extends GryoDriveSubsystem {
 	
 	DigitalInput frontLimitSwitch = new DigitalInput(4);
 	
