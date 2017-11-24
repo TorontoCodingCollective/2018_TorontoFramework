@@ -21,8 +21,8 @@ public class ChassisSubsystem extends Subsystem {
 	Encoder leftEncoder = new Encoder(0, 1);
 	Encoder rightEncoder = new Encoder(2, 3, RobotConst.INVERTED);
 	
-	SpeedPID leftPid = new SpeedPID(1.0);
-	SpeedPID rightPid = new SpeedPID(1.0);
+	SpeedPID leftPid = new SpeedPID(1.0, RobotConst.MAX_DRIVE_ENCODER_SPEED);
+	SpeedPID rightPid = new SpeedPID(1.0, RobotConst.MAX_DRIVE_ENCODER_SPEED);
 	
 	DigitalInput frontLimitSwitch = new DigitalInput(4);
 	
@@ -48,17 +48,14 @@ public class ChassisSubsystem extends Subsystem {
 	public void setSpeed(double speedSetpoint) {
 		
 		if (pidActive) {
-			double leftNormalizedSpeed = leftEncoder.getRate() /
-					RobotConst.MAX_DRIVE_ENCODER_SPEED;
+			leftPid.setSetpoint(speedSetpoint);
+			rightPid.setSetpoint(speedSetpoint);
 			
 			double leftMotorPIDOutput = 
-					leftPid.calculate(speedSetpoint, leftNormalizedSpeed);
-			
-			double rightNormalizedSpeed = rightEncoder.getRate() /
-					RobotConst.MAX_DRIVE_ENCODER_SPEED;
+					leftPid.calculate(leftEncoder.get());
 			
 			double rightMotorPIDOutput = 
-					rightPid.calculate(speedSetpoint, rightNormalizedSpeed);
+					rightPid.calculate(rightEncoder.get());
 			
 			SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
 			SmartDashboard.putNumber("Right Speed", rightMotorPIDOutput);
@@ -80,17 +77,14 @@ public class ChassisSubsystem extends Subsystem {
 
 		if (pidActive) {
 			
-			double leftNormalizedSpeed = leftEncoder.getRate() /
-					RobotConst.MAX_DRIVE_ENCODER_SPEED;
+			leftPid.setSetpoint(leftSpeedSetpoint);
+			rightPid.setSetpoint(rightSpeedSetpoint);
 			
 			double leftMotorPIDOutput = 
-					leftPid.calculate(leftSpeedSetpoint, leftNormalizedSpeed);
-			
-			double rightNormalizedSpeed = rightEncoder.getRate() /
-					RobotConst.MAX_DRIVE_ENCODER_SPEED;
+					leftPid.calculate(leftEncoder.get());
 			
 			double rightMotorPIDOutput = 
-					rightPid.calculate(rightSpeedSetpoint, rightNormalizedSpeed);
+					rightPid.calculate(rightEncoder.get());
 			
 			SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
 			SmartDashboard.putNumber("Right Speed", rightMotorPIDOutput);

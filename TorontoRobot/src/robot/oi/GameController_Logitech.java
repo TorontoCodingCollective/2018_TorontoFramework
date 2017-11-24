@@ -5,7 +5,8 @@ public class GameController_Logitech extends GameController {
 	public GameController_Logitech(int port) {
 		super(port);
 	}
-	
+
+	@Override
 	public double getAxis(Stick stick, Axis axis) {
 		
 		switch (stick) {
@@ -26,37 +27,73 @@ public class GameController_Logitech extends GameController {
 				return super.getRawAxis(5);
 			}
 			
+		default: return 0.0;
 		}
-		
-		return 0;
 	}
 	
+	@Override
 	public double getTrigger(Trigger trigger) {
-		return 0;
+		
+		switch (trigger) {
+		case LEFT:
+			return getRawAxis(2);
+		case RIGHT:
+			return getRawAxis(3);
+			
+		default: return 0.0;
+		}
 	}
 	
+	@Override
 	public boolean getButton(Button button) {
 		
 		switch (button) {
+		case A:
+			return getRawButton(1);
+		case B:
+			return getRawButton(2);
 		case X:
 			return getRawButton(3);
 		case Y:
 			return getRawButton(4);
-		case A:
-			return getRawButton(1);
-		case B:
+			
+		case BACK:
+			return getRawButton(7);
+		case START:
+			return getRawButton(8);
+
+		case LEFT_BUMPER:
+			return getRawButton(5);
+		case RIGHT_BUMPER:
+			return getRawButton(6);
+	
+		default: return false;
 		}
-		return false;
 	}
 	
+	@Override
 	public boolean getButton(Trigger trigger) {
-		return false;
+		
+		switch (trigger) {
+		case LEFT:
+			return getRawAxis(2) > 0.3;
+		case RIGHT:
+			return getRawAxis(3) > 0.3;
+			
+		default: return false;
+		}
 	}
 
 	@Override
 	public boolean getButton(Stick stick) {
-		// TODO Auto-generated method stub
-		return false;
+
+		switch (stick) {
+		case LEFT:
+			return getRawButton(9);
+		case RIGHT:
+			return getRawButton(10);
+			
+		default: return false;
+		}
 	}
-	
 }
