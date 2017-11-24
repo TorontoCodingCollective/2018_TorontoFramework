@@ -39,19 +39,78 @@ public class DefaultChassisCommand extends Command {
 		
 		double leftSpeed = 0;
 		double rightSpeed = 0;
+		//curving in the directions
+		
+		if (speed > 0.8 && turn > 0.8){
+			leftSpeed = 1.0;
+			rightSpeed = 0.9;
+		}
+		if (speed < -0.8 && turn < -0.8){
+			leftSpeed = -1.0;
+			rightSpeed = -0.9;
+		}
+		if (speed < -0.8 && turn > 0.8){
+			leftSpeed = -0.9;
+			rightSpeed = -1.0;
+		}
+		if (speed > 0.8 && turn < -0.8){
+			leftSpeed = 0.9;
+			rightSpeed = 1.0;
+		}
+		//slow curves
+		//slow speed high turning
+		if ((speed < 0.8 && speed > 0.2) && turn > 0.8){
+			leftSpeed = 0.6;
+			rightSpeed = 0.4;
+		}
+		if ((speed > -0.8 && speed < -0.2) && turn > 0.8){
+			leftSpeed = -0.4;
+			rightSpeed = -0.6;
+		}
+		if ((speed > 0.2 && speed < 0.8) && turn < -0.8){
+			leftSpeed = 0.6;
+			rightSpeed = 0.4;
+		}
+		if ((speed > -0.8 && speed < -0.2) && turn < -0.8){
+			leftSpeed = 0.4;
+			rightSpeed = 0.6;
+		}
+		//high speed small adjustments
+		if (speed > 0.8 && (turn < 0.8 && turn > 0.2)){
+			leftSpeed = 1.0;
+			rightSpeed = 0.95;
+		}
+		if (speed < -0.8 && (turn > -0.8 && turn < -0.2)){
+			leftSpeed = -1.0;
+			rightSpeed = -0.95;
+		}
+		if (speed < -0.8 && (turn < 0.8 && turn > 0.2)){
+			leftSpeed = -1.0;
+			rightSpeed = -0.95;
+		}
+		if (speed > 0.8 && (turn > -0.8 && turn < -0.2)){
+			leftSpeed = 1.0;
+			rightSpeed = -0.95;
+		}
 		
 		// If the speed is low, then turn
-		if (Math.abs(speed) < 0.2 && Math.abs(turn) > 0.2) {
+		if (Math.abs(speed) < 0.2 && Math.abs(turn) > 0.8) {
 			leftSpeed = turn;
 			rightSpeed = -turn;
 		}
-		
+		if (Math.abs(speed) < 0.2 && (Math.abs(turn) > 0.2 && Math.abs(turn) < 0.8)){
+			leftSpeed = 0.4;
+			rightSpeed = -0.4;
+		}
 		// If the turn is low, then go based on speed
-		if (Math.abs(speed) > 0.2 && Math.abs(turn) < 0.2) {
+		if (Math.abs(speed) > 0.8 && Math.abs(turn) < 0.2) {
 			leftSpeed = speed;
 			rightSpeed = speed;
 		}
-		
+		if ((Math.abs(speed) < 0.8 && Math.abs(speed) > 0.2) && Math.abs(turn) < 0.2){
+			leftSpeed = 0.4;
+			rightSpeed = 0.4;
+		}
 		Robot.chassisSubsystem.setSpeed(leftSpeed, rightSpeed);
 		
 	}
