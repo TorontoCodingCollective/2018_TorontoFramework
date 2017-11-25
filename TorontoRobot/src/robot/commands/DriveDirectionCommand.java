@@ -55,6 +55,7 @@ public class DriveDirectionCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
 
+    	Robot.chassisSubsystem.disableAnglePid();
     	Robot.chassisSubsystem.setSpeed(0, 0);
     	
     }
