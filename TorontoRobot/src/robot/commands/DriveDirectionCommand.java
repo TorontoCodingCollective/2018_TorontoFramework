@@ -14,6 +14,8 @@ public class DriveDirectionCommand extends Command {
     public DriveDirectionCommand(double direction, double speed) {
     	this.direction = direction;
     	this.speed     = speed;
+    	
+    	requires(Robot.chassisSubsystem);
     }
 
     // Called just before this Command runs the first time
