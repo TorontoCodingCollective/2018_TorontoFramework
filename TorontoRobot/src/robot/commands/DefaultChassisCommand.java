@@ -31,7 +31,7 @@ public class DefaultChassisCommand extends Command {
 		}
 		
 		if (Robot.oi.getForwardThrust()) {
-			Scheduler.getInstance().add(new ForwardThrustCommand());
+			Scheduler.getInstance().add(new ForwardThrustCommand(0));
 		}
 		
 		double speed = Robot.oi.getSpeed();
