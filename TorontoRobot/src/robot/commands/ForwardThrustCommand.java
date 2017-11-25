@@ -6,9 +6,10 @@ import robot.Robot;
 /**
  *
  */
-public class ForwardThrustCommand extends Command {
+public class ForwardThrustCommand extends SafeCommand {
 
-    public ForwardThrustCommand() {
+    public ForwardThrustCommand(double maxTimeSec) {
+    	super(maxTimeSec);
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.chassisSubsystem);
     }
@@ -24,6 +25,9 @@ public class ForwardThrustCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	
+    	if (super.isFinished()) { return true; }
+    	
     	return Robot.chassisSubsystem.atFrontLimit();
     }
 
