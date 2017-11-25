@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import robot.commands.DefaultChassisCommand;
 import robot.oi.OI;
-import robot.subsystems.ChassisSubsystem;
+import robot.subsystems.ChassisSubsystem2;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,7 +20,7 @@ import robot.subsystems.ChassisSubsystem;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
+	public static final ChassisSubsystem2 chassisSubsystem = new ChassisSubsystem2();
 	public static OI oi;
 
 	Command autonomousCommand;

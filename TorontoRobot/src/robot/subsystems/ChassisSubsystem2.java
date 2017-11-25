@@ -1,5 +1,6 @@
 package robot.subsystems;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Victor;
@@ -17,6 +18,7 @@ public class ChassisSubsystem2 extends GryoDriveSubsystem {
 	
 	public ChassisSubsystem2() {
 		super(
+			new AnalogGyro(0),
 			new Victor(RobotMap.LEFT_MOTOR),  RobotConst.NOT_INVERTED,
 			new Victor(RobotMap.RIGHT_MOTOR), RobotConst.INVERTED,
 			new Encoder(0, 1),                RobotConst.NOT_INVERTED,
@@ -25,6 +27,8 @@ public class ChassisSubsystem2 extends GryoDriveSubsystem {
 			RobotConst.MAX_DRIVE_ENCODER_SPEED);
 	}
 
+	public void init() {};
+	
 	/**
 	 * At front limit
 	 * @return {@literal true} if at the limit, {@literal false} otherwise.

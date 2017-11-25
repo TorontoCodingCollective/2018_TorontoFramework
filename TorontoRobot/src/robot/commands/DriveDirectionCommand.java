@@ -1,22 +1,24 @@
 package robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import robot.Robot;
 
 /**
  *
  */
-public class ForwardThrustCommand extends SafeCommand {
+public class DriveDirectionCommand extends Command {
 
-    public ForwardThrustCommand(double maxTimeSec) {
-    	super(maxTimeSec);
-		// Use requires() here to declare subsystem dependencies
-		requires(Robot.chassisSubsystem);
+	private double direction;
+	private double speed;
+	
+    public DriveDirectionCommand(double direction, double speed) {
+    	this.direction = direction;
+    	this.speed     = speed;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.chassisSubsystem.setSpeed(.1, .1);
+    	
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -25,15 +27,11 @@ public class ForwardThrustCommand extends SafeCommand {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	
-    	if (super.isFinished()) { return true; }
-    	
-    	return Robot.chassisSubsystem.atFrontLimit();
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.chassisSubsystem.setSpeed(0, 0);
     }
 
     // Called when another command which requires one or more of the same

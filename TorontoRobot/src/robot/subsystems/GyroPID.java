@@ -51,19 +51,28 @@ public class GyroPID extends PIDController {
 		}
 
 		// Normalize the gyro angle.
-		// FIXME: normalize?
-		double normalizedGyroAngle = currentGyroAngle;
+		// Current gyro angle is -infinity to +infinity
+		double normalizedGyroAngle = currentGyroAngle % 360.0d;
+		
+		if (normalizedGyroAngle < 0) {
+			normalizedGyroAngle = normalizedGyroAngle + 360.0;
+		}
 		
 		// Calculate the error
 		// Normalize the error for the shortest path.  The error
 		// can be between -360 and +360.
 		double error = super.getSetpoint() - normalizedGyroAngle;
 		
-		// FIXME: shortest path?
+		if (error > 180) {
+			error = error - 360.0;
+		}
+		
+		if (error < -180) {
+			error = error + 360.0;
+		}
 		
 		// Add the proportional output
-		// FIXME:
-		double totalOutput = 0;
+		double totalOutput = super.getP() * error;
 
 		// The output cannot steer more than 1.0
 		if (totalOutput > 1.0) {
@@ -84,7 +93,7 @@ public class GyroPID extends PIDController {
 		
 		if (kI != 0) {
 			
-			totalError += error;
+			totalError += error;  // sum of all errors
 			
 			double integralOutput = totalError * kI;
 			

@@ -24,10 +24,10 @@ public class DefaultChassisCommand extends Command {
 	protected void execute() {
 		
 		if (Robot.oi.getPidOn()) {
-			Robot.chassisSubsystem.setPidActive(true);
+			Robot.chassisSubsystem.enableSpeedPids();
 		}
 		if (Robot.oi.getPidOff()) {
-			Robot.chassisSubsystem.setPidActive(false);
+			Robot.chassisSubsystem.disableSpeedPids();
 		}
 		
 		if (Robot.oi.getForwardThrust()) {

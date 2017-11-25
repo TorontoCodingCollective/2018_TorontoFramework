@@ -1,10 +1,17 @@
 package robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class GryoDriveSubsystem extends DriveSubsystem {
 
+	private GyroBase gyro;
+	
+	private GyroPID gyroPid = new GyroPID(1.0);
+	
 	/**
 	 * Drive subsystem with left/right drive and gyro.
 	 * <p>
@@ -36,7 +43,7 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 	 * to normalize the PID input encoder feedback.
 	 */
 	public GryoDriveSubsystem(
-			// FIXME: add a gyro?
+			GyroBase gyro,
 			SpeedController leftMotor,  boolean leftMotorInverted, 
 			SpeedController rightMotor,	boolean rightMotorInverted, 
 			Encoder leftEncoder,        boolean leftEncoderInverted, 
@@ -52,7 +59,7 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 			rightEncoder, rightEncoderInverted, 
 			kP, maxEncoderSpeed);
 		
-		//FIXME: where is the gyro?
+		this.gyro = gyro;
 	}
 	
 	
@@ -63,7 +70,7 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 	 * this routine has no effect
 	 */
 	public void disableAnglePid() {
-		// FIXME:
+		gyroPid.disable();
 	}
 	
 	/**
@@ -73,14 +80,14 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 	 * this routine has no effect.
 	 */
 	public void enableAnglePid() {
-		//FIXME:
+		gyroPid.enable();
 	}
 	
 	/**
 	 * Set the current gyro heading to zero.
 	 */
 	public void resetGyroAngle() {
-		resetGyroAngle(0);
+		gyro.reset();
 	}
 	
 	/**
@@ -104,26 +111,46 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 	 * @return gyro angle in degrees.
 	 */
 	public double getGryoAngle() {
-		// FIXME:
-		return 0;
+		
+		// Normalize the angle
+		double angle = gyro.getAngle() % 360;
+		
+		if (angle < 0) {
+			angle = angle + 360;
+		}
+		
+		return angle;
+	}
+	
+	/** 
+	 * Get the GyroPid Steering
+	 */
+	public double getGyroPidSteering() {
+		return gyroPid.get();
 	}
 	
 	/**
 	 * Set the Heading for the Gyro PID
 	 */
-	public void setHeading() {
-		//FIXME:
+	public void setDirection(double direction) {
+		gyroPid.setSetpoint(direction);
 	}
 	
 	@Override
 	public void updatePeriodic() {
+		
 		super.updatePeriodic();
 		
 		// Update all PIDs
-		// FIXME:
+		if (gyroPid.isEnabled()) {
+			gyroPid.calculate(gyro.getAngle());
+		}
 		
 		// Update all SmartDashboard values
-		// FIXME:
+		SmartDashboard.putData("Gyro", gyro);
+		SmartDashboard.putNumber("Gyro Angle", getGryoAngle());
+		
+		SmartDashboard.putData("Gyro PID", gyroPid);
 	}
 	
 	
