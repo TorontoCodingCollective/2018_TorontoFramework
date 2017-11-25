@@ -30,6 +30,10 @@ public class OI {
 	public boolean getForwardThrust() {
 		return gameController.getButton(Button.A);
 	}
+
+	public boolean getStartDriveDirection() {
+		return gameController.getButton(Button.B);
+	}
 	
 	
 	//// CREATING BUTTONS
