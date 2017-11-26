@@ -10,9 +10,12 @@ public abstract class GameController extends Joystick {
 
 	public abstract double getAxis(Stick stick, Axis axis);
 
-	public abstract double getTrigger(Trigger trigger);
-
 	public abstract boolean getButton(Button button);
 	public abstract boolean getButton(Stick stick);
-	public abstract boolean getButton(Trigger trigger);
+	
+	public boolean getButton(Trigger trigger) {
+		return getTrigger(trigger) > 0.3;
+	};
+
+	public abstract double getTrigger(Trigger trigger);
 }
