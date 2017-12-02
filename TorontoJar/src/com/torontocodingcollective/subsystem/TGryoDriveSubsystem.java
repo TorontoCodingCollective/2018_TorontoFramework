@@ -152,6 +152,7 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 		SmartDashboard.putNumber("Gyro Angle", getGryoAngle());
 		
 		SmartDashboard.putData("Gyro PID", gyroPid);
+		SmartDashboard.putNumber("Gyro PID steering", getGyroPidSteering());
 	}
 	
 	

@@ -35,7 +35,7 @@ public class DefaultChassisCommand extends Command {
 		}
 		
 		if (Robot.oi.getStartDriveDirection()) {
-			Scheduler.getInstance().add(new DriveDirectionCommand(0, .3));
+			Scheduler.getInstance().add(new DriveDirectionCommand(0, .2));
 		}
 		
 		double speed = Robot.oi.getSpeed();
