@@ -6,16 +6,17 @@ import robot.Robot;
 /**
  *
  */
-public class ForwardThrustCommand extends Command {
+public class ForwardThrustCommand extends SafeCommand {
 
-    public ForwardThrustCommand() {
+    public ForwardThrustCommand(double maxTimeSec) {
+    	super(maxTimeSec);
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.chassisSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.chassisSubsystem.setSpeed(.1);
+    	Robot.chassisSubsystem.setSpeed(.1, .1);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -24,12 +25,15 @@ public class ForwardThrustCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	
+    	if (super.isFinished()) { return true; }
+    	
     	return Robot.chassisSubsystem.atFrontLimit();
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.chassisSubsystem.setSpeed(0);
+    	Robot.chassisSubsystem.setSpeed(0, 0);
     }
 
     // Called when another command which requires one or more of the same

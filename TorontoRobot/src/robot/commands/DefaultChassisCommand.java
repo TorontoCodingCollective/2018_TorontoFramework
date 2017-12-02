@@ -24,14 +24,18 @@ public class DefaultChassisCommand extends Command {
 	protected void execute() {
 		
 		if (Robot.oi.getPidOn()) {
-			Robot.chassisSubsystem.setPidActive(true);
+			Robot.chassisSubsystem.enableSpeedPids();
 		}
 		if (Robot.oi.getPidOff()) {
-			Robot.chassisSubsystem.setPidActive(false);
+			Robot.chassisSubsystem.disableSpeedPids();
 		}
 		
 		if (Robot.oi.getForwardThrust()) {
-			Scheduler.getInstance().add(new ForwardThrustCommand());
+			Scheduler.getInstance().add(new ForwardThrustCommand(0));
+		}
+		
+		if (Robot.oi.getStartDriveDirection()) {
+			Scheduler.getInstance().add(new DriveDirectionCommand(0, .3));
 		}
 		
 		double speed = Robot.oi.getSpeed();
@@ -39,6 +43,60 @@ public class DefaultChassisCommand extends Command {
 		
 		double leftSpeed = 0;
 		double rightSpeed = 0;
+		//curving in the directions
+		
+		if (speed > 0.8 && turn > 0.8){
+			leftSpeed = 1.0;
+			rightSpeed = 0.9;
+		}
+		if (speed < -0.8 && turn < -0.8){
+			leftSpeed = -1.0;
+			rightSpeed = -0.9;
+		}
+		if (speed < -0.8 && turn > 0.8){
+			leftSpeed = -0.9;
+			rightSpeed = -1.0;
+		}
+		if (speed > 0.8 && turn < -0.8){
+			leftSpeed = 0.9;
+			rightSpeed = 1.0;
+		}
+		//slow curves
+		//slow speed high turning
+		if ((speed < 0.8 && speed > 0.2) && turn > 0.8){
+			leftSpeed = 0.6;
+			rightSpeed = 0.4;
+		}
+		if ((speed > -0.8 && speed < -0.2) && turn > 0.8){
+			leftSpeed = -0.4;
+			rightSpeed = -0.6;
+		}
+		if ((speed > 0.2 && speed < 0.8) && turn < -0.8){
+			leftSpeed = 0.6;
+			rightSpeed = 0.4;
+		}
+		if ((speed > -0.8 && speed < -0.2) && turn < -0.8){
+			leftSpeed = 0.4;
+			rightSpeed = 0.6;
+		}
+		//high speed small adjustments
+		if (speed > 0.8 && (turn < 0.8 && turn > 0.2)){
+			leftSpeed = 1.0;
+			rightSpeed = 0.95;
+		}
+		if (speed < -0.8 && (turn > -0.8 && turn < -0.2)){
+			leftSpeed = -1.0;
+			rightSpeed = -0.95;
+		}
+		if (speed < -0.8 && (turn < 0.8 && turn > 0.2)){
+			leftSpeed = -1.0;
+			rightSpeed = -0.95;
+		}
+		if (speed > 0.8 && (turn > -0.8 && turn < -0.2)){
+			leftSpeed = 1.0;
+			rightSpeed = -0.95;
+		}
+		
 		//curving in the directions
 		
 		if (speed > 0.8 && turn > 0.8){

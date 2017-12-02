@@ -1,9 +1,9 @@
-package robot.subsystems;
+package com.torontocodingcollective.pid;
 
 import edu.wpi.first.wpilibj.PIDController;
 
 /**
- * Class implements a Proportional (PID) Control Loop for heading (gyro angle) control.
+ * Class implements a Proportional (PID) Control Loop for motor speed control.
  * <p>
  * The PID controller calculate routine must be called at a consistent rate
  * (every control loop) when the PID is enabled.
@@ -11,22 +11,25 @@ import edu.wpi.first.wpilibj.PIDController;
  * This PID controller uses the Smartdashboard communications features of the 
  * wpiLib PID controller, but does not use its control loop functionality.
  */
-public class GyroPID extends PIDController {
+public class TSpeedPID extends PIDController {
 
 	private double output;
+	private double maxEncoderRate;
 	private double totalError;
 	
-	public GyroPID(double kP) {
-		super(kP, 0.0d, 0.0d, 0.0d, 
+	public TSpeedPID(double kP, double maxEncoderRate) {
+		super(kP, 0.0d, 0.0d, 1.0d, 
 				new NullPIDSource(),
 				new NullPIDOutput()	);
+		this.maxEncoderRate = maxEncoderRate;
 		this.totalError     = 0;
 	}
 
-	public GyroPID(double kP, double kI) {
-		super(kP, kI, 0.0d, 0.0d, 
+	public TSpeedPID(double kP, double kI, double maxEncoderRate) {
+		super(kP, kI, 0.0d, 1.0d, 
 				new NullPIDSource(),
 				new NullPIDOutput()	);
+		this.maxEncoderRate = maxEncoderRate;
 		this.totalError     = 0;
 	}
 
@@ -43,34 +46,48 @@ public class GyroPID extends PIDController {
 	 * @return the calculated result. This result can also be 
 	 * retrieved with subsequent calls to {@link #get()}.
 	 */
-	public double calculate(double currentGyroAngle) {
+	public double calculate(double rawRate) {
 		
 		// If the PID is not enabled, this routine does nothing.
 		if (!this.isEnabled()) {
 			return 0;
 		}
-
-		// Normalize the gyro angle.
-		// FIXME: normalize?
-		double normalizedGyroAngle = currentGyroAngle;
+		
+		// Calculate the normalized rate (speed) of the encoder
+		double normalizedRate = rawRate / maxEncoderRate;
+		
+		if (normalizedRate > 1.0) { 
+			normalizedRate = 1.0; 
+		}
+		
+		if (normalizedRate < -1.0) { 
+			normalizedRate = -1.0; 
+		}
 		
 		// Calculate the error
-		// Normalize the error for the shortest path.  The error
-		// can be between -360 and +360.
-		double error = super.getSetpoint() - normalizedGyroAngle;
+		double error = super.getSetpoint() - normalizedRate;
 		
-		// FIXME: shortest path?
-		
-		// Add the proportional output
-		// FIXME:
-		double totalOutput = 0;
+		// Get proportional output
+		double proportionalOutput = getP() * error;
 
-		// The output cannot steer more than 1.0
+		// Calculate the total output for the proportional 
+		// and feed forward terms.  In a speed controller
+		// the feed forward term is always 1.0 (the speed
+		// setpoint is used as the feed forward term).
+		
+		// Use a temporary totalOutput variable for 
+		// all calculations.  Limit the totalOutput
+		// and assign the value to the output variable at the 
+		// end in order to prevent reads of intermediary
+		// output results.
+		double totalOutput = super.getSetpoint() + proportionalOutput;
+		
+		// The output cannot drive more than 1.0
 		if (totalOutput > 1.0) {
 			totalOutput = 1.0;
 		}
 		
-		// The output cannot steer less than -1.0
+		// The output cannot drive less than -1.0
 		if (totalOutput < -1.0) {
 			totalOutput = -1.0;
 		}

@@ -1,10 +1,11 @@
 package robot.subsystems;
 
+import com.torontocodingcollective.sensors.gyro.TAnalogGyro;
+import com.torontocodingcollective.subsystem.TGryoDriveSubsystem;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.RobotConst;
 import robot.RobotMap;
@@ -13,105 +14,50 @@ import robot.commands.DefaultChassisCommand;
 /**
  *
  */
-public class ChassisSubsystem extends Subsystem {
-	
-	SpeedController leftMotor  = new Victor(RobotMap.LEFT_MOTOR);
-	SpeedController rightMotor = new Victor(RobotMap.RIGHT_MOTOR);
-	
-	Encoder leftEncoder = new Encoder(0, 1);
-	Encoder rightEncoder = new Encoder(2, 3, RobotConst.INVERTED);
-	
-	SpeedPID leftPid = new SpeedPID(1.0, RobotConst.MAX_DRIVE_ENCODER_SPEED);
-	SpeedPID rightPid = new SpeedPID(1.0, RobotConst.MAX_DRIVE_ENCODER_SPEED);
+public class ChassisSubsystem extends TGryoDriveSubsystem {
 	
 	DigitalInput frontLimitSwitch = new DigitalInput(4);
 	
-	boolean pidActive = true;
-	
+	public ChassisSubsystem() {
+		super(
+			new TAnalogGyro(0, RobotConst.INVERTED),
+			new Victor(RobotMap.LEFT_MOTOR),  RobotConst.NOT_INVERTED,
+			new Victor(RobotMap.RIGHT_MOTOR), RobotConst.INVERTED,
+			new Encoder(0, 1),                RobotConst.NOT_INVERTED,
+			new Encoder(2, 3),                RobotConst.INVERTED,
+			1.0,
+			RobotConst.MAX_DRIVE_ENCODER_SPEED);
+	}
+
 	public void init() {
-		rightMotor.setInverted(true);
-	}
+		TAnalogGyro gyro = (TAnalogGyro) super.gyro;
+		gyro.setSensitivity(0.0017);
+	};
 	
-	public void initDefaultCommand() {
-		setDefaultCommand(new DefaultChassisCommand());
-	}
-	
-	public void setPidActive(boolean pidEnable) {
-		pidActive = pidEnable;
-	}
-	
+	/**
+	 * At front limit
+	 * @return {@literal true} if at the limit, {@literal false} otherwise.
+	 */
 	public boolean atFrontLimit() {
-		// Limit switch is true when NOT activated.
+
+		// The limit switch we are using is wired to return true when 
+		// not activated and false otherwise.
 		return !frontLimitSwitch.get();
 	}
 	
-	public void setSpeed(double speedSetpoint) {
+	// Initialize the default command for the Chassis subsystem.
+	public void initDefaultCommand() {
 		
-		if (pidActive) {
-			leftPid.setSetpoint(speedSetpoint);
-			rightPid.setSetpoint(speedSetpoint);
-			
-			double leftMotorPIDOutput = 
-					leftPid.calculate(leftEncoder.get());
-			
-			double rightMotorPIDOutput = 
-					rightPid.calculate(rightEncoder.get());
-			
-			SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
-			SmartDashboard.putNumber("Right Speed", rightMotorPIDOutput);
-	
-			leftMotor.set(leftMotorPIDOutput);
-			rightMotor.set(rightMotorPIDOutput);
-		}
-		else {
-			
-			SmartDashboard.putNumber("Left Speed", speedSetpoint);
-			SmartDashboard.putNumber("Right Speed", speedSetpoint);
-	
-			leftMotor.set(speedSetpoint);
-			rightMotor.set(speedSetpoint);
-		}
+		setDefaultCommand(new DefaultChassisCommand());
 	}
-
-	public void setSpeed(double leftSpeedSetpoint, double rightSpeedSetpoint) {
-
-		if (pidActive) {
-			
-			leftPid.setSetpoint(leftSpeedSetpoint);
-			rightPid.setSetpoint(rightSpeedSetpoint);
-			
-			double leftMotorPIDOutput = 
-					leftPid.calculate(leftEncoder.get());
-			
-			double rightMotorPIDOutput = 
-					rightPid.calculate(rightEncoder.get());
-			
-			SmartDashboard.putNumber("Left Speed", leftMotorPIDOutput);
-			SmartDashboard.putNumber("Right Speed", rightMotorPIDOutput);
 	
-			leftMotor.set(leftMotorPIDOutput);
-			rightMotor.set(rightMotorPIDOutput);
-		}
-		else {
-			
-			SmartDashboard.putNumber("Left Speed", leftSpeedSetpoint);
-			SmartDashboard.putNumber("Right Speed", rightSpeedSetpoint);
-	
-			leftMotor.set(leftSpeedSetpoint);
-			rightMotor.set(rightSpeedSetpoint);
-		}
-	}
 
+	// Periodically update the dashboard and any PIDs or sensors
 	public void updatePeriodic() {
 		
-		SmartDashboard.putBoolean("PID Active", pidActive);
+		super.updatePeriodic();
 
-		SmartDashboard.putNumber("Left Encoder Raw", leftEncoder.getRaw());
-		SmartDashboard.putNumber("Left Encoder Speed", leftEncoder.getRate());
-		SmartDashboard.putNumber("Right Encoder Raw", rightEncoder.getRaw());
-		SmartDashboard.putNumber("Right Encoder Speed", rightEncoder.getRate());
-		SmartDashboard.putData("LeftPid", leftPid);
-		SmartDashboard.putData("RightPid", rightPid);
+		SmartDashboard.putBoolean("At Front Limit", atFrontLimit());
 	}
 	
 }

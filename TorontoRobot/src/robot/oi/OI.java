@@ -1,5 +1,11 @@
 package robot.oi;
 
+import com.torontocodingcollective.oi.TAxis;
+import com.torontocodingcollective.oi.TButton;
+import com.torontocodingcollective.oi.TGameController;
+import com.torontocodingcollective.oi.TGameController_Logitech;
+import com.torontocodingcollective.oi.TStick;
+
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -8,27 +14,31 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	
-	private GameController_Logitech gameController = new GameController_Logitech(1);
+	private TGameController gameController = new TGameController_Logitech(1);
 	
 	
 	public double getSpeed() {
-		return - gameController.getAxis(Stick.LEFT, Axis.Y);
+		return - gameController.getAxis(TStick.LEFT, TAxis.Y);
 	}
 	
 	public double getTurn() {
-		return gameController.getAxis(Stick.RIGHT, Axis.X);
+		return gameController.getAxis(TStick.RIGHT, TAxis.X);
 	}
 	
 	public boolean getPidOff() {
-		return gameController.getButton(Button.X);
+		return gameController.getButton(TButton.X);
 	}
 	
 	public boolean getPidOn() {
-		return gameController.getButton(Button.Y);
+		return gameController.getButton(TButton.Y);
 	}
 	
 	public boolean getForwardThrust() {
-		return gameController.getButton(Button.A);
+		return gameController.getButton(TButton.A);
+	}
+
+	public boolean getStartDriveDirection() {
+		return gameController.getButton(TButton.B);
 	}
 	
 	
