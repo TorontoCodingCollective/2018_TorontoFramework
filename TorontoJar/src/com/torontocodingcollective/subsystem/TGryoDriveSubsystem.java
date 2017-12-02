@@ -10,9 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 
 	protected TGyro gyro;
-	
-	private TGyroPID gyroPid = new TGyroPID(1.0);
-	
+
+	private TGyroPID gyroPid;
 	/**
 	 * Drive subsystem with left/right drive and gyro.
 	 * <p>
@@ -37,7 +36,7 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	 * @param rightEncoder encoder for the right motor
 	 * @param rightEncoderInverted {@literal true} if the encoder is 
 	 * inverted, {@literal false} otherwise
-	 * @param kP Default Proportional gain for the motor speed pid.  The 
+	 * @param speedkP Default Proportional gain for the motor speed pid.  The 
 	 * speed PIDs are displayed on the SmartDashboard and can be 
 	 * adjusted through that interface
 	 * @param maxEncoderSpeed the max loaded robot encoder rate used
@@ -49,21 +48,22 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 			SpeedController rightMotor,	boolean rightMotorInverted, 
 			Encoder leftEncoder,        boolean leftEncoderInverted, 
 			Encoder rightEncoder,	    boolean rightEncoderInverted, 
-			double kP, 
+			double speedkP, double gyrokP,
 			double maxEncoderSpeed
 			) {
-		
+
 		super(
-			leftMotor, leftMotorInverted, 
-			rightMotor, rightMotorInverted, 
-			leftEncoder, leftEncoderInverted, 
-			rightEncoder, rightEncoderInverted, 
-			kP, maxEncoderSpeed);
+				leftMotor, leftMotorInverted, 
+				rightMotor, rightMotorInverted, 
+				leftEncoder, leftEncoderInverted, 
+				rightEncoder, rightEncoderInverted, 
+				speedkP, maxEncoderSpeed);
 		
+		gyroPid = new TGyroPID(gyrokP);
 		this.gyro = gyroSensor;
 	}
-	
-	
+
+
 	/**
 	 * Disable the angle PID for the Drive subsystem.
 	 * <p>
@@ -73,7 +73,7 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	public void disableAnglePid() {
 		gyroPid.disable();
 	}
-	
+
 	/**
 	 * Enable the angle PIDs for the Drive subsystem.
 	 * <p>
@@ -83,14 +83,14 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	public void enableAnglePid() {
 		gyroPid.enable();
 	}
-	
+
 	/**
 	 * Set the current gyro heading to zero.
 	 */
 	public void resetGyroAngle() {
 		gyro.reset();
 	}
-	
+
 	/**
 	 * Reset the gyro angle to a known heading angle.
 	 * <p>
@@ -103,7 +103,7 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	public void resetGyroAngle(double angle) {
 		gyro.resetGyroAngle(angle);
 	}
-	
+
 	/**
 	 * Get the current gyro angle
 	 * <p>
@@ -112,49 +112,49 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	 * @return gyro angle in degrees.
 	 */
 	public double getGryoAngle() {
-		
+
 		// Normalize the angle
 		double angle = gyro.getAngle() % 360;
-		
+
 		if (angle < 0) {
 			angle = angle + 360;
 		}
-		
+
 		return angle;
 	}
-	
+
 	/** 
 	 * Get the GyroPid Steering
 	 */
 	public double getGyroPidSteering() {
 		return gyroPid.get();
 	}
-	
+
 	/**
 	 * Set the Heading for the Gyro PID
 	 */
 	public void setDirection(double direction) {
 		gyroPid.setSetpoint(direction);
 	}
-	
+
 	@Override
 	public void updatePeriodic() {
-		
+
 		super.updatePeriodic();
-		
+
 		// Update all PIDs
 		if (gyroPid.isEnabled()) {
 			gyroPid.calculate(gyro.getAngle());
 		}
-		
+
 		// Update all SmartDashboard values
 		SmartDashboard.putData("Gyro", gyro);
 		SmartDashboard.putNumber("Gyro Angle", getGryoAngle());
-		
+
 		SmartDashboard.putData("Gyro PID", gyroPid);
 		SmartDashboard.putNumber("Gyro PID steering", getGyroPidSteering());
 	}
-	
-	
-	
+
+
+
 }

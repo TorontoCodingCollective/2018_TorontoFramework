@@ -26,6 +26,7 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 			new Encoder(0, 1),                RobotConst.NOT_INVERTED,
 			new Encoder(2, 3),                RobotConst.INVERTED,
 			1.0,
+			0.1,
 			RobotConst.MAX_DRIVE_ENCODER_SPEED);
 	}
 
