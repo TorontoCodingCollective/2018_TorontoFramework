@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	
-	private TGameController gameController = new TGameController_Logitech(1);
+	private TGameController gameController = new TGameController_Logitech(0);
 	
 	
 	public double getSpeed() {

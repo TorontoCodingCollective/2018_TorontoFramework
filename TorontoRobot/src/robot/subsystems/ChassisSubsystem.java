@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.RobotConst;
 import robot.RobotMap;
-import robot.commands.OldDefaultChassisCommand;
+import robot.commands.DefaultChassisCommand;
 
 /**
  *
@@ -48,7 +48,7 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 	// Initialize the default command for the Chassis subsystem.
 	public void initDefaultCommand() {
 		
-		setDefaultCommand(new OldDefaultChassisCommand());
+		setDefaultCommand(new DefaultChassisCommand());
 	}
 	
 

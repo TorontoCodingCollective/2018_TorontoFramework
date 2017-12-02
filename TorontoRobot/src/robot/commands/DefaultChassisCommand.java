@@ -136,19 +136,19 @@ public class DefaultChassisCommand extends Command {
 		//high speed small adjustments
 		if (speed > 0.8 && (turn < 0.8 && turn > 0.2)){
 			leftSpeed = 1.0;
-			rightSpeed = 0.95;
+			rightSpeed = 0.9;
 		}
 		if (speed < -0.8 && (turn > -0.8 && turn < -0.2)){
 			leftSpeed = -1.0;
-			rightSpeed = -0.95;
+			rightSpeed = -0.9;
 		}
 		if (speed < -0.8 && (turn < 0.8 && turn > 0.2)){
-			leftSpeed = -1.0;
-			rightSpeed = -0.95;
+			leftSpeed = -0.9;
+			rightSpeed = -1.0;
 		}
 		if (speed > 0.8 && (turn > -0.8 && turn < -0.2)){
-			leftSpeed = 1.0;
-			rightSpeed = -0.95;
+			leftSpeed = 0.9;
+			rightSpeed = 1.0;
 		}
 		
 		// If the speed is low, then turn
@@ -156,18 +156,26 @@ public class DefaultChassisCommand extends Command {
 			leftSpeed = turn;
 			rightSpeed = -turn;
 		}
-		if (Math.abs(speed) < 0.2 && (Math.abs(turn) > 0.2 && Math.abs(turn) < 0.8)){
+		if (Math.abs(speed) < 0.2 && (turn > 0.2 && turn < 0.8)){
 			leftSpeed = 0.4;
 			rightSpeed = -0.4;
+		}
+		if (Math.abs(speed) < 0.2 && (turn < -0.2 && turn > -0.8)){
+			leftSpeed = -0.4;
+			rightSpeed = 0.4;
 		}
 		// If the turn is low, then go based on speed
 		if (Math.abs(speed) > 0.8 && Math.abs(turn) < 0.2) {
 			leftSpeed = speed;
 			rightSpeed = speed;
 		}
-		if ((Math.abs(speed) < 0.8 && Math.abs(speed) > 0.2) && Math.abs(turn) < 0.2){
+		if ((speed < 0.8 && speed > 0.2) && Math.abs(turn) < 0.2){
 			leftSpeed = 0.4;
 			rightSpeed = 0.4;
+		}
+		if ((speed > -0.8 && speed < -0.2) && Math.abs(turn) < 0.2){
+			leftSpeed = -0.4;
+			rightSpeed = -0.4;
 		}
 		Robot.chassisSubsystem.setSpeed(leftSpeed, rightSpeed);
 		
