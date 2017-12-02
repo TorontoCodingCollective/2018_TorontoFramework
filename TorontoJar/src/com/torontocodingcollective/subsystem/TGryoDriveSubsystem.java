@@ -1,16 +1,17 @@
-package robot.subsystems;
+package com.torontocodingcollective.subsystem;
+
+import com.torontocodingcollective.pid.TGyroPID;
+import com.torontocodingcollective.sensors.gyro.TGyro;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public abstract class GryoDriveSubsystem extends DriveSubsystem {
+public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 
-	private GyroBase gyro;
+	protected TGyro gyro;
 	
-	private GyroPID gyroPid = new GyroPID(1.0);
+	private TGyroPID gyroPid = new TGyroPID(1.0);
 	
 	/**
 	 * Drive subsystem with left/right drive and gyro.
@@ -42,8 +43,8 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 	 * @param maxEncoderSpeed the max loaded robot encoder rate used
 	 * to normalize the PID input encoder feedback.
 	 */
-	public GryoDriveSubsystem(
-			GyroBase gyro,
+	public TGryoDriveSubsystem(
+			TGyro gyroSensor,
 			SpeedController leftMotor,  boolean leftMotorInverted, 
 			SpeedController rightMotor,	boolean rightMotorInverted, 
 			Encoder leftEncoder,        boolean leftEncoderInverted, 
@@ -59,7 +60,7 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 			rightEncoder, rightEncoderInverted, 
 			kP, maxEncoderSpeed);
 		
-		this.gyro = gyro;
+		this.gyro = gyroSensor;
 	}
 	
 	
@@ -100,7 +101,7 @@ public abstract class GryoDriveSubsystem extends DriveSubsystem {
 	 * @param angle new angle reading for the gyro
 	 */
 	public void resetGyroAngle(double angle) {
-		// FIXME:
+		gyro.resetGyroAngle(angle);
 	}
 	
 	/**

@@ -43,6 +43,7 @@ public class DefaultChassisCommand extends Command {
 		
 		double leftSpeed = 0;
 		double rightSpeed = 0;
+		
 		//curving in the directions
 		
 		if (speed > 0.8 && turn > 0.8){

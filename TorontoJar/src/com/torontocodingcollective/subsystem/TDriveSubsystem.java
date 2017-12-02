@@ -1,4 +1,6 @@
-package robot.subsystems;
+package com.torontocodingcollective.subsystem;
+
+import com.torontocodingcollective.pid.TSpeedPID;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -12,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * of the drivetrain.  The DriveSubsystm can be used with drive PIDs
  * on or off. 
  */
-public abstract class DriveSubsystem extends Subsystem {
+public abstract class TDriveSubsystem extends Subsystem {
 	
 	private final SpeedController leftMotor;
 	private final SpeedController rightMotor;
@@ -20,8 +22,8 @@ public abstract class DriveSubsystem extends Subsystem {
 	private final Encoder leftEncoder;
 	private final Encoder rightEncoder;
 	
-	private final SpeedPID leftSpeedPid;  
-	private final SpeedPID rightSpeedPid; 
+	private final TSpeedPID leftSpeedPid;  
+	private final TSpeedPID rightSpeedPid; 
 	
 	boolean speedPidsActive = false;
 
@@ -50,7 +52,7 @@ public abstract class DriveSubsystem extends Subsystem {
 	 * @param maxEncoderSpeed the max loaded robot encoder rate used
 	 * to normalize the PID input encoder feedback.
 	 */
-	public DriveSubsystem(
+	public TDriveSubsystem(
 			SpeedController leftMotor,
 			boolean         leftMotorInverted,
 			SpeedController rightMotor,
@@ -81,8 +83,8 @@ public abstract class DriveSubsystem extends Subsystem {
 			rightEncoder.setReverseDirection(true);
 		}
 		
-		leftSpeedPid  = new SpeedPID(kP, maxEncoderSpeed);
-		rightSpeedPid = new SpeedPID(kP, maxEncoderSpeed);
+		leftSpeedPid  = new TSpeedPID(kP, maxEncoderSpeed);
+		rightSpeedPid = new TSpeedPID(kP, maxEncoderSpeed);
 		
 		disableSpeedPids();
 	}

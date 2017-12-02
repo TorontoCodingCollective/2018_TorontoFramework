@@ -1,6 +1,6 @@
-package robot.oi;
+package com.torontocodingcollective.oi;
 
-public enum Button {
+public enum TButton {
 
 	// Joystick Controller
 	ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
