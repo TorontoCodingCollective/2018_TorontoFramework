@@ -18,13 +18,29 @@ public class TToggle {
 		this.previousButtonState = gameController.getButton(button);
 	}
 	
-	private boolean get(){
+	/**
+	 * Get the current state of the toggle
+	 * @return {@code true} or {@code false}
+	 */
+	public boolean get(){
 		return toggleState;
 	}
-	private void set(boolean set){
+	
+	/**
+	 * Set the current state of the toggle
+	 * @param set value {@code true} or {@code false}
+	 */
+	public void set(boolean set){
 		toggleState = set;
 	}
-	private void updatePeriodic(){
+	
+	/**
+	 * UpdatePeriodic
+	 * <p>
+	 * This routine must be called every loop in order to update the state of the 
+	 * toggle based on the game controller and button.
+	 */
+	public void updatePeriodic(){
 		if (gameController.getButton(button) && !previousButtonState){
 			toggleState = !toggleState;
 		}
