@@ -40,6 +40,9 @@ public class OI {
 	public boolean getStartDriveDirection() {
 		return gameController.getButton(TButton.B);
 	}
+	public int getArcCommand(){
+		return gameController.getPOV();
+	}
 	
 	
 	//// CREATING BUTTONS

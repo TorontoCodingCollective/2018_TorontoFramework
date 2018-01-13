@@ -37,6 +37,12 @@ public class DefaultChassisCommand extends Command {
 		if (Robot.oi.getStartDriveDirection()) {
 			Scheduler.getInstance().add(new DriveDirectionCommand(0, .2));
 		}
+		if (Robot.oi.getArcCommand() == 90){
+			Scheduler.getInstance().add(new ArcCommand(4, Robot.chassisSubsystem.getGryoAngle(), Robot.chassisSubsystem.getGryoAngle() + 90, 0.8));
+		}
+		if (Robot.oi.getArcCommand() == 270){
+			Scheduler.getInstance().add(new ArcCommand(4, Robot.chassisSubsystem.getGryoAngle(), Robot.chassisSubsystem.getGryoAngle() - 90, 0.8));
+		}
 		
 		double speed = Robot.oi.getSpeed();
 		double turn  = Robot.oi.getTurn();
