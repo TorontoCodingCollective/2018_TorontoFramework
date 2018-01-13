@@ -2,9 +2,9 @@ package com.torontocodingcollective.subsystem;
 
 import com.torontocodingcollective.pid.TGyroPID;
 import com.torontocodingcollective.sensors.gyro.TGyro;
+import com.torontocodingcollective.speedcontroller.TSpeedController;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
@@ -25,11 +25,7 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	 * routines to set the PIDs on and off
 	 * 
 	 * @param leftMotor that implements the SpeedController interface
-	 * @param leftMotorInverted {@literal true} if the motor is 
-	 * inverted, {@literal false} otherwise
 	 * @param rightMotor that implements the SpeedController interface
-	 * @param rightMotorInverted {@literal true} if the motor is 
-	 * inverted, {@literal false} otherwise
 	 * @param leftEncoder encoder for the left motor
 	 * @param leftEncoderInverted {@literal true} if the encoder is 
 	 * inverted, {@literal false} otherwise
@@ -44,8 +40,8 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	 */
 	public TGryoDriveSubsystem(
 			TGyro gyroSensor,
-			SpeedController leftMotor,  boolean leftMotorInverted, 
-			SpeedController rightMotor,	boolean rightMotorInverted, 
+			TSpeedController leftMotor, 
+			TSpeedController rightMotor, 
 			Encoder leftEncoder,        boolean leftEncoderInverted, 
 			Encoder rightEncoder,	    boolean rightEncoderInverted, 
 			double speedkP, double gyrokP,
@@ -53,8 +49,8 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 			) {
 
 		super(
-				leftMotor, leftMotorInverted, 
-				rightMotor, rightMotorInverted, 
+				leftMotor, 
+				rightMotor, 
 				leftEncoder, leftEncoderInverted, 
 				rightEncoder, rightEncoderInverted, 
 				speedkP, maxEncoderSpeed);

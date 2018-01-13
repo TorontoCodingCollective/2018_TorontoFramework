@@ -1,10 +1,9 @@
 package com.torontocodingcollective.subsystem;
 
 import com.torontocodingcollective.pid.TSpeedPID;
+import com.torontocodingcollective.speedcontroller.TSpeedController;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -14,10 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * of the drivetrain.  The DriveSubsystm can be used with drive PIDs
  * on or off. 
  */
-public abstract class TDriveSubsystem extends Subsystem {
+public abstract class TDriveSubsystem extends TSubsystem {
 	
-	private final SpeedController leftMotor;
-	private final SpeedController rightMotor;
+	private final TSpeedController leftMotor;
+	private final TSpeedController rightMotor;
 	
 	private final Encoder leftEncoder;
 	private final Encoder rightEncoder;
@@ -53,10 +52,8 @@ public abstract class TDriveSubsystem extends Subsystem {
 	 * to normalize the PID input encoder feedback.
 	 */
 	public TDriveSubsystem(
-			SpeedController leftMotor,
-			boolean         leftMotorInverted,
-			SpeedController rightMotor,
-			boolean         rightMotorInverted,
+			TSpeedController leftMotor,
+			TSpeedController rightMotor,
 			Encoder         leftEncoder,
 			boolean         leftEncoderInverted,
 			Encoder         rightEncoder,
@@ -68,13 +65,6 @@ public abstract class TDriveSubsystem extends Subsystem {
 		this.rightMotor = rightMotor;
 		this.leftEncoder = leftEncoder;
 		this.rightEncoder = rightEncoder;
-		
-		if (leftMotorInverted) {
-			rightMotor.setInverted(true);
-		}
-		if (rightMotorInverted) {
-			rightMotor.setInverted(true);
-		}
 		
 		if (leftEncoderInverted) {
 			leftEncoder.setReverseDirection(true);
