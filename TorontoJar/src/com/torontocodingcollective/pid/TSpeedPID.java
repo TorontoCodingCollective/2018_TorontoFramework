@@ -14,22 +14,19 @@ import edu.wpi.first.wpilibj.PIDController;
 public class TSpeedPID extends PIDController {
 
 	private double output;
-	private double maxEncoderRate;
 	private double totalError;
 	
-	public TSpeedPID(double kP, double maxEncoderRate) {
+	public TSpeedPID(double kP) {
 		super(kP, 0.0d, 0.0d, 1.0d, 
 				new NullPIDSource(),
 				new NullPIDOutput()	);
-		this.maxEncoderRate = maxEncoderRate;
 		this.totalError     = 0;
 	}
 
-	public TSpeedPID(double kP, double kI, double maxEncoderRate) {
+	public TSpeedPID(double kP, double kI) {
 		super(kP, kI, 0.0d, 1.0d, 
 				new NullPIDSource(),
 				new NullPIDOutput()	);
-		this.maxEncoderRate = maxEncoderRate;
 		this.totalError     = 0;
 	}
 
@@ -46,15 +43,12 @@ public class TSpeedPID extends PIDController {
 	 * @return the calculated result. This result can also be 
 	 * retrieved with subsequent calls to {@link #get()}.
 	 */
-	public double calculate(double rawRate) {
+	public double calculate(double normalizedRate) {
 		
 		// If the PID is not enabled, this routine does nothing.
 		if (!this.isEnabled()) {
 			return 0;
 		}
-		
-		// Calculate the normalized rate (speed) of the encoder
-		double normalizedRate = rawRate / maxEncoderRate;
 		
 		if (normalizedRate > 1.0) { 
 			normalizedRate = 1.0; 

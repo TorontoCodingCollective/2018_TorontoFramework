@@ -1,4 +1,4 @@
-package robot.commands;
+package robot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -22,6 +22,13 @@ public class DefaultChassisCommand extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+		
+		if (Robot.oi.getTurboOn()) {
+			Robot.chassisSubsystem.enableTurbo();
+		}
+		else {
+			Robot.chassisSubsystem.disableTurbo();
+		}
 		
 		if (Robot.oi.getPidOn()) {
 			Robot.chassisSubsystem.enableSpeedPids();

@@ -96,16 +96,12 @@ public class TPwmSpeedController extends TSpeedController {
 
 	@Override
 	public void disable() {
-		for (PWMSpeedController speedController: speedControllerList) {
-			speedController.disable();
-		}
+		set(0);
 	}
 
 	@Override
 	public void stopMotor() {
-		for (PWMSpeedController speedController: speedControllerList) {
-			speedController.stopMotor();
-		}
+		set(0);
 	}
 
 	/**

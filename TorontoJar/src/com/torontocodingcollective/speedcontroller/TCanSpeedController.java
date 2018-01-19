@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.torontocodingcollective.sensors.encoder.TCanEncoder;
+import com.torontocodingcollective.sensors.encoder.TEncoder;
 
 
 public class TCanSpeedController extends TSpeedController {
@@ -11,10 +13,6 @@ public class TCanSpeedController extends TSpeedController {
 	private final BaseMotorController canSpeedController;
 	
 	private boolean isInverted = false;
-	
-	public TCanSpeedController(TCanSpeedControllerType controllerType, int canAddress, int... canFollowerAddresses) {
-		this(controllerType, canAddress, false, canFollowerAddresses);
-	}
 	
 	public TCanSpeedController(TCanSpeedControllerType controllerType, int canAddress, boolean isInverted, int... followerCanAddresses) {
 		this.isInverted = isInverted;
@@ -24,6 +22,10 @@ public class TCanSpeedController extends TSpeedController {
 			BaseMotorController follower = newController(controllerType, followerCanAddress);
 			follower.follow(canSpeedController);
 		}
+	}
+	
+	public TCanSpeedController(TCanSpeedControllerType controllerType, int canAddress, int... canFollowerAddresses) {
+		this(controllerType, canAddress, false, canFollowerAddresses);
 	}
 	
 	public TCanSpeedController(TCanSpeedControllerType controllerType, int canAddress, 
@@ -42,22 +44,11 @@ public class TCanSpeedController extends TSpeedController {
 		this.isInverted = isInverted;
 	}
 	
-	private BaseMotorController newController(TCanSpeedControllerType controllerType, int canAddress) {
-		
-		switch (controllerType) {
-		case VICTOR_SPX: return new VictorSPX(canAddress);
-		case TALON_SRX:  
-		default:         return new TalonSRX(canAddress);
-		}
-	}
 	@Override
-	public void set(double speed) {
-		if (isInverted) {
-			speed = -speed;
-		}
-		canSpeedController.set(ControlMode.PercentOutput, speed);
+	public void disable() {
+		set(0.0);
 	}
-
+	
 	@Override
 	public double get() {
 		
@@ -68,27 +59,22 @@ public class TCanSpeedController extends TSpeedController {
 		}
 		return speed;
 	}
-
-	@Override
-	public void setInverted(boolean isInverted) {
-		// Stop the motors before inverting
-		set(0.0);
-		this.isInverted = isInverted;
+	
+	/**
+	 * Return an encoder with the same inversion setting as the motor
+	 * @return TEncoder attached to this TalonSRX, or {@code null} if this
+	 * is not a TalonSRX device.  The encoder is assumed to be a quadrature encoder.
+	 */
+	public TEncoder getEncoder() {
+		if (this.canSpeedController instanceof TalonSRX) {
+			return new TCanEncoder((TalonSRX) canSpeedController, isInverted);
+		}
+		return null;
 	}
 
 	@Override
 	public boolean getInverted() {
 		return isInverted;
-	}
-
-	@Override
-	public void disable() {
-		set(0.0);
-	}
-
-	@Override
-	public void stopMotor() {
-		set(0.0);
 	}
 
 	/**
@@ -98,6 +84,40 @@ public class TCanSpeedController extends TSpeedController {
 	@Override
 	public void pidWrite(double output) {
 		set(output);
+	}
+
+	@Override
+	public void set(double speed) {
+		if (isInverted) {
+			speed = -speed;
+		}
+		canSpeedController.set(ControlMode.PercentOutput, speed);
+	}
+
+	@Override
+	public void setInverted(boolean isInverted) {
+		// If there is nothing to do, then return
+		if (this.isInverted == isInverted) { 
+			return;
+		}
+		
+		// Stop the motors before inverting
+		set(0.0);
+		this.isInverted = isInverted;
+	}
+
+	@Override
+	public void stopMotor() {
+		set(0.0);
+	}
+
+	private BaseMotorController newController(TCanSpeedControllerType controllerType, int canAddress) {
+		
+		switch (controllerType) {
+		case VICTOR_SPX: return new VictorSPX(canAddress);
+		case TALON_SRX:  
+		default:         return new TalonSRX(canAddress);
+		}
 	}
 
 }

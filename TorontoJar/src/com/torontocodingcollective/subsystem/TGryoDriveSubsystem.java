@@ -1,10 +1,10 @@
 package com.torontocodingcollective.subsystem;
 
 import com.torontocodingcollective.pid.TGyroPID;
+import com.torontocodingcollective.sensors.encoder.TEncoder;
 import com.torontocodingcollective.sensors.gyro.TGyro;
 import com.torontocodingcollective.speedcontroller.TSpeedController;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
@@ -27,11 +27,7 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 	 * @param leftMotor that implements the SpeedController interface
 	 * @param rightMotor that implements the SpeedController interface
 	 * @param leftEncoder encoder for the left motor
-	 * @param leftEncoderInverted {@literal true} if the encoder is 
-	 * inverted, {@literal false} otherwise
 	 * @param rightEncoder encoder for the right motor
-	 * @param rightEncoderInverted {@literal true} if the encoder is 
-	 * inverted, {@literal false} otherwise
 	 * @param speedkP Default Proportional gain for the motor speed pid.  The 
 	 * speed PIDs are displayed on the SmartDashboard and can be 
 	 * adjusted through that interface
@@ -42,8 +38,8 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 			TGyro gyroSensor,
 			TSpeedController leftMotor, 
 			TSpeedController rightMotor, 
-			Encoder leftEncoder,        boolean leftEncoderInverted, 
-			Encoder rightEncoder,	    boolean rightEncoderInverted, 
+			TEncoder leftEncoder,   
+			TEncoder rightEncoder,	   
 			double speedkP, double gyrokP,
 			double maxEncoderSpeed
 			) {
@@ -51,8 +47,8 @@ public abstract class TGryoDriveSubsystem extends TDriveSubsystem {
 		super(
 				leftMotor, 
 				rightMotor, 
-				leftEncoder, leftEncoderInverted, 
-				rightEncoder, rightEncoderInverted, 
+				leftEncoder, 
+				rightEncoder, 
 				speedkP, maxEncoderSpeed);
 		
 		gyroPid = new TGyroPID(gyrokP);
