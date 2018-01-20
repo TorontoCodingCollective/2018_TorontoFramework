@@ -12,27 +12,20 @@ import com.torontocodingcollective.oi.TToggle;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	
+
 	private TGameController gameController = new TGameController_Logitech(0);
-	
+
 	private TToggle pneumaticsToggle = new TToggle(gameController, TStick.LEFT);
-	
+	private TToggle pidToggle = new TToggle(gameController, TStick.RIGHT);
+
 	public double getSpeed() {
 		return - gameController.getAxis(TStick.LEFT, TAxis.Y);
 	}
-	
+
 	public double getTurn() {
 		return gameController.getAxis(TStick.RIGHT, TAxis.X);
 	}
-	
-	public boolean getPidOff() {
-		return gameController.getButton(TButton.X);
-	}
-	
-	public boolean getPidOn() {
-		return gameController.getButton(TButton.Y);
-	}
-	
+
 	public boolean getForwardThrust() {
 		return gameController.getButton(TButton.A);
 	}
@@ -43,27 +36,32 @@ public class OI {
 	public int getArcCommand(){
 		return gameController.getPOV();
 	}
-	
+
 	public boolean getCancelCommand(){
 		return gameController.getButton(TButton.BACK);
 	}
-	
+
 	public boolean reset(){
 		return gameController.getButton(TButton.START);
 	}
-	
+
 	public boolean getTurboOn() {
 		return gameController.getButton(TButton.LEFT_BUMPER);
 	}
-	
+
 	public boolean getCompressorEnabled() {
 		return pneumaticsToggle.get();
 	}
 	
+	public boolean getSpeedPIDEnabled() {
+		return pidToggle.get();
+	}
 	
 	public void updatePeriodic() {
 		pneumaticsToggle.updatePeriodic();
+		pidToggle.updatePeriodic();
 	}
+
 	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

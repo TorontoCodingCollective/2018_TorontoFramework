@@ -20,5 +20,5 @@ public class RobotConst {
 	public static final double DRIVE_GYRO_PID_KP = .1;
 	public static final double DRIVE_GYRO_PID_KI = 0;
 	
-	public static final double DRIVE_SPEED_PID_KP = 1.0;
+	public static final double DRIVE_SPEED_PID_KP = 0.75;
 }

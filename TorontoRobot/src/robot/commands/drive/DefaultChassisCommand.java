@@ -29,13 +29,13 @@ public class DefaultChassisCommand extends Command {
 		else {
 			Robot.chassisSubsystem.disableTurbo();
 		}
-
-		if (Robot.oi.getPidOn()) {
+		if (Robot.oi.getSpeedPIDEnabled()) {
 			Robot.chassisSubsystem.enableSpeedPids();
 		}
-		if (Robot.oi.getPidOff()) {
+		else {
 			Robot.chassisSubsystem.disableSpeedPids();
 		}
+
 
 		if (Robot.oi.getForwardThrust()) {
 			Scheduler.getInstance().add(new ForwardThrustCommand(0));
@@ -133,7 +133,7 @@ public class DefaultChassisCommand extends Command {
 			leftSpeed = 0.9;
 			rightSpeed = 1.0;
 		}
-		
+
 		// If the speed is low, then turn
 		if (Math.abs(speed) < 0.2 && Math.abs(turn) > 0.8) {
 			leftSpeed = turn;
