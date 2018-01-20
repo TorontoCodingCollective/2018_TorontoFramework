@@ -30,7 +30,7 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 		
 		// Uncomment this block to use CAN based speed controllers
 		super(
-			new TAnalogGyro(0, RobotConst.INVERTED),
+			new TAnalogGyro(0),
 			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.LEFT_MOTOR_CAN_ADDRESS,  
 					RobotConst.LEFT_MOTOR_ORIENTATION,  RobotMap.LEFT_FOLLOWER_CAN_ADDRESS), 
 			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.RIGHT_MOTOR_CAN_ADDRESS, 

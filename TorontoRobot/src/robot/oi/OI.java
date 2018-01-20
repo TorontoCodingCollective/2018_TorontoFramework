@@ -41,7 +41,6 @@ public class OI {
 		return gameController.getButton(TButton.B);
 	}
 	public int getArcCommand(){
-		System.out.println("getting pov");
 		return gameController.getPOV();
 	}
 	

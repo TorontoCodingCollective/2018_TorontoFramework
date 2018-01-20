@@ -26,7 +26,11 @@ public class ArcCommand extends TSafeCommand {
 		else if(this.turnangle < -180) {
 			this.turnangle += 360;
 		}
-		System.out.println(this.turnangle);//90//-90
+		if (this.endDirection < 0) {
+			this.endDirection += 360;
+		}
+		System.out.println(this.turnangle);
+		System.out.println(this.endDirection);
 		requires(Robot.chassisSubsystem);
 	}
 	
@@ -37,20 +41,20 @@ public class ArcCommand extends TSafeCommand {
 		double slowSpeed = ((radius-(this.rWidth/2))* Math.toRadians(this.turnangle)) / 
 				((radius+(this.rWidth/2))* Math.toRadians(this.turnangle)) * this.speed;
 		
-		//System.out.println((radius-(this.rWidth/2))* Math.toRadians(this.turnangle));//345.26462024512756 //  454.7353797548724 
-		//System.out.println((radius+(this.rWidth/2))* Math.toRadians(this.turnangle));// 454.7353797548724 // 345.26462024512756 
-		//System.out.println(fastSpeed);// 0.4 // 0.4
-		//System.out.println(slowSpeed);// 0.5268253427553903 // 0.30370596669319583 
+		//System.out.println((radius-(this.rWidth/2))* Math.toRadians(this.turnangle)); 
+		//System.out.println((radius+(this.rWidth/2))* Math.toRadians(this.turnangle));
+		//System.out.println(fastSpeed);
+		//System.out.println(slowSpeed);
 		if (this.turnangle < 0) {
-			this.rSpeed = slowSpeed;
-			this.lSpeed = fastSpeed;
+			this.lSpeed = slowSpeed;
+			this.rSpeed = fastSpeed;
 		}
 		else if (this.turnangle > 0) {
-			this.rSpeed = fastSpeed;
-			this.lSpeed = slowSpeed;
+			this.lSpeed = fastSpeed;
+			this.rSpeed = slowSpeed;
 		}
-		System.out.println(this.rSpeed);// 0.4 // 0.30370596669319583 
-		System.out.println(this.lSpeed);// 0.5268253427553903 // 0.4
+		System.out.println(this.rSpeed); 
+		System.out.println(this.lSpeed);
 		Robot.chassisSubsystem.setSpeed(lSpeed, rSpeed);
 	}
 
@@ -58,7 +62,20 @@ public class ArcCommand extends TSafeCommand {
 		if (super.isFinished()) {
 			return true;
 		}
-		if (Math.abs(Robot.chassisSubsystem.getGryoAngle() - this.endDirection) <= 2){
+		double error = Robot.chassisSubsystem.getGryoAngle() - this.endDirection;
+		if (this.turnangle < 0) {
+			error -= 26;//2 is the normal
+		}
+		else if (this.turnangle > 0) {
+			error += 50;//2 is tne normal
+		}
+		if (error > 180) {
+			error -= 360;
+		}
+		else if (error < -180) {
+			error += 360;
+		}
+		if (Math.abs(error) <= 2) {
 			return true;
 		}
 		return false;
