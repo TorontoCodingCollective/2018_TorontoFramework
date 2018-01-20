@@ -6,7 +6,7 @@ import robot.Robot;
 /**
  *
  */
-public class ForwardThrustCommand extends SafeCommand {
+public class ForwardThrustCommand extends TSafeCommand {
 
     public ForwardThrustCommand(double maxTimeSec) {
     	super(maxTimeSec);

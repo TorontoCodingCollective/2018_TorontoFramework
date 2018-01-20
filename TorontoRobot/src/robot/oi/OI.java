@@ -43,7 +43,12 @@ public class OI {
 	public int getArcCommand(){
 		return gameController.getPOV();
 	}
-	
+	public boolean getCancelCommand(){
+		return gameController.getButton(TButton.BACK);
+	}
+	public boolean reset(){
+		return gameController.getButton(TButton.START);
+	}
 	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

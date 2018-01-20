@@ -1,25 +1,34 @@
 package robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import robot.Robot;
 
-public class SafeCommand extends Command {
+public class TSafeCommand extends Command {
 
 	private final double maxTimeSec;
 	
-	public SafeCommand(double maxTimeSec) {
+	public TSafeCommand(double maxTimeSec) {
 		this.maxTimeSec = maxTimeSec;
 	}
 	
     protected boolean isFinished() {
+    	if (isCancelled() || isTimedOut()) {
+    		return true;
+    	}
         return false;
     }
 
     public boolean isCancelled() {
+    	if (Robot.oi.getCancelCommand()) {
+    		return true;
+    	}
     	return false;
     }
     
     public boolean isTimedOut() {
-    	timeSinceInitialized();
+    	if (timeSinceInitialized() >= maxTimeSec) {
+    		return true;
+    	}
     	return false;
     }
 }
