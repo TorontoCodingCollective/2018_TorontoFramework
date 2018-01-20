@@ -21,7 +21,7 @@ public class DriveDirectionCommand extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	
-    	Robot.chassisSubsystem.enableAnglePid();
+    	Robot.chassisSubsystem.enableGyroPid();
     	Robot.chassisSubsystem.setDirection(direction);
     	
     }
@@ -58,7 +58,7 @@ public class DriveDirectionCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
 
-    	Robot.chassisSubsystem.disableAnglePid();
+    	Robot.chassisSubsystem.disableGyroPid();
     	Robot.chassisSubsystem.setSpeed(0, 0);
     	
     }

@@ -65,6 +65,23 @@ public abstract class TDriveSubsystem extends TSubsystem {
 	}
 
 	/**
+	 * Drive subsystem with left/right drive.
+	 * <p>
+	 * The drive subsystem has pids that are initialized to 
+	 * disabled.  Use the {@link #enableSpeedPids()} and {@link #disableSpeedPids()}
+	 * routines to set the PIDs on and off
+	 * 
+	 * @param leftMotor that implements the TSpeedController interface
+	 * @param rightMotor that implements the TSpeedController interface
+	 */
+	public TDriveSubsystem(
+			TSpeedController leftMotor,
+			TSpeedController rightMotor) {
+		
+		this(leftMotor, rightMotor, null, null, 0, 0);
+	}
+
+	/**
 	 * Disable the speed PIDs for the Drive subsystem.
 	 * <p>
 	 * NOTE: This routine will not change the motor speeds.  
@@ -96,7 +113,11 @@ public abstract class TDriveSubsystem extends TSubsystem {
 	 */
 	public void enableSpeedPids() {
 		
+		// If there are no encoders, then do not enable the PID
 		if (leftEncoder == null || rightEncoder == null) { return; }
+		
+		// If the proportional gain is not set, then do not enable the PID
+		if (leftSpeedPid.getP() == 0) { return; }
 		
 		if (!speedPidsActive) {
 			leftSpeedPid.enable();
@@ -109,7 +130,7 @@ public abstract class TDriveSubsystem extends TSubsystem {
 	 * Get the raw distance covered since the last encoder reset
 	 * @return
 	 */
-	public int getRawEncoderDistance() {
+	public int getEncoderDistance() {
 		if (leftEncoder == null || rightEncoder == null) { 
 			return 0;
 		}
@@ -117,7 +138,7 @@ public abstract class TDriveSubsystem extends TSubsystem {
 		return (leftEncoder.get() + rightEncoder.get()) / 2;
 	}
 	
-	public double getRawEncoderSpeed() {
+	public double getEncoderSpeed() {
 
 		if (leftEncoder == null || rightEncoder == null) { 
 			return 0;
@@ -162,12 +183,83 @@ public abstract class TDriveSubsystem extends TSubsystem {
 		if (rightEncoder != null) {
 			this.rightEncoder.setInverted(rightInverted);
 		}
+		
+		if (leftEncoder == null || rightEncoder == null) {
+			disableSpeedPids();
+		}
 	}
 	
+	/**
+	 * Initialize the encoders for this drive subsystem.  This method is used
+	 * when the encoders are attached to a channel that is used by another device
+	 * and must be constructed after this subsystem.  For example, if an
+	 * encoder is attached to a CAN based TalonSRX device, the encoder
+	 * can be retrieved from the TalonSRX using the code: 
+	 * <br>
+	 * {@code ((TCanSpeedController) xxxxMotor).getEncoder(); }
+	 * 
+	 * @param leftEncoder
+	 * @param leftInverted {@code true} if the encoder is inverted, {@code false} otherwise
+	 * @param rightEncoder
+	 * @param rightInverted {@code true} if the encoder is inverted, {@code false} otherwise
+	 * @param kP value to initialize the motor speed Pids
+	 * @param maxEncoderSpeed to use to scale the encoder feedback
+	 */
+	public void setEncoders(TEncoder leftEncoder, boolean leftInverted, TEncoder rightEncoder, boolean rightInverted,
+			double kP, double maxEncoderSpeed) {
+		
+		setEncoders(leftEncoder, leftInverted, rightEncoder, rightInverted);
+		
+		setPidGain(kP);
+	}
+	
+	/**
+	 * Set the max encoder speed on the encoders.  This routine would be used
+	 * when there is a gear shifting robot and the max encoder speed changes
+	 * between the gears.
+	 * 
+	 * @param rawEncoderSpeed
+	 */
 	public void setMaxEncoderSpeed(double rawEncoderSpeed) {
 		this.maxEncoderSpeed = rawEncoderSpeed;
 	}
 	
+	/**
+	 * Set the max encoder speed on the encoders and adjust the proportional 
+	 * gain on the PIDs.  This routine would be used
+	 * when there is a gear shifting robot and the max encoder speed changes
+	 * between the gears and the proportional control value changes.
+	 * 
+	 * @param rawEncoderSpeed
+	 */
+	public void setMaxEncoderSpeed(double rawEncoderSpeed, double kP) {
+		this.maxEncoderSpeed = rawEncoderSpeed;
+		setPidGain(kP);
+	}
+
+	/**
+	 * Set the Pid gain for the PID controller and disable the 
+	 * pids if the gain is set to zero.
+	 * @param kP
+	 */
+	private void setPidGain(double kP) {
+		
+		leftSpeedPid.setP(kP);
+		rightSpeedPid.setP(kP);
+		
+		if (kP == 0) {
+			disableSpeedPids();
+		}
+	}
+	
+	/**
+	 * Set the speeds on the motors.  This command will be used to set the setpoint
+	 * of the controller if the PIDs are enabled, or to set the left and right
+	 * motor speeds directly if the PIDs are not enabled.
+	 * 
+	 * @param leftSpeedSetpoint
+	 * @param rightSpeedSetpoint
+	 */
 	public void setSpeed(double leftSpeedSetpoint, double rightSpeedSetpoint) {
 
 		if (speedPidsActive) {
@@ -178,11 +270,9 @@ public abstract class TDriveSubsystem extends TSubsystem {
 		}
 		else {
 			
-			SmartDashboard.putNumber("Left Motor", leftSpeedSetpoint);
-			SmartDashboard.putNumber("Right Motor", rightSpeedSetpoint);
-	
 			leftMotor.set(leftSpeedSetpoint);
 			rightMotor.set(rightSpeedSetpoint);
+
 		}
 	}
 	
@@ -214,6 +304,10 @@ public abstract class TDriveSubsystem extends TSubsystem {
 		
 			SmartDashboard.putData("LeftPid", leftSpeedPid);
 			SmartDashboard.putData("RightPid", rightSpeedPid);
+		}
+		else {
+			SmartDashboard.putNumber("Left Motor", leftMotor.get());
+			SmartDashboard.putNumber("Right Motor", rightMotor.get());
 		}
 	}
 	

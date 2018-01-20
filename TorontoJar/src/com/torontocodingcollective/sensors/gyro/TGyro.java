@@ -16,13 +16,13 @@ public abstract class TGyro extends GyroBase {
 	}
 	
 	public void resetGyroAngle() {
-		resetGyroAngle(0);
+		setGyroAngle(0);
 	}
 	
 	public abstract double getRate();
 	public abstract double getAngle();
 
-	public void resetGyroAngle(double angle) {
+	public void setGyroAngle(double angle) {
 		
 		// clear the previous offset
 		offset = 0;

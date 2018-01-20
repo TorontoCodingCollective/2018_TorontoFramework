@@ -19,7 +19,7 @@ public class TAnalogGyro extends TGyro {
 	
 	@Override
 	public void calibrate() {
-		super.resetGyroAngle(0);
+		super.setGyroAngle(0);
 		analogGyro.calibrate();
 	}
 
@@ -35,7 +35,7 @@ public class TAnalogGyro extends TGyro {
 
 	@Override
 	public void reset() {
-		super.resetGyroAngle(0);
+		super.setGyroAngle(0);
 	}
 	
 	public void setSensitivity(double voltsPerDegreePerSecond) {

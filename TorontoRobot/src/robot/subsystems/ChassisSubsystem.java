@@ -1,8 +1,9 @@
 package robot.subsystems;
 
+import com.torontocodingcollective.sensors.encoder.TPwmEncoder;
 import com.torontocodingcollective.sensors.gyro.TAnalogGyro;
-import com.torontocodingcollective.speedcontroller.TCanSpeedController;
-import com.torontocodingcollective.speedcontroller.TCanSpeedControllerType;
+import com.torontocodingcollective.speedcontroller.TPwmSpeedController;
+import com.torontocodingcollective.speedcontroller.TPwmSpeedControllerType;
 import com.torontocodingcollective.subsystem.TGryoDriveSubsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,41 +30,39 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 	public ChassisSubsystem() {
 		
 		// Uncomment this block to use CAN based speed controllers
-		super(
-			new TAnalogGyro(0, RobotConst.INVERTED),
-			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.LEFT_MOTOR_CAN_ADDRESS,  RobotConst.NOT_INVERTED, RobotMap.LEFT_FOLLOWER_CAN_ADDRESS), 
-			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.RIGHT_MOTOR_CAN_ADDRESS, RobotConst.INVERTED,     RobotMap.RIGHT_FOLLOWER_CAN_ADDRESS), 
-			null,
-			null,
-			1.0,
-			0.1,
-			RobotConst.MAX_DRIVE_ENCODER_SPEED);
-		
-		super.setEncoders(
-				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.NOT_INVERTED,
-				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.INVERTED );
-
+//		super(
+//			new TAnalogGyro(0, RobotConst.INVERTED),
+//			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.LEFT_MOTOR_CAN_ADDRESS,  
+//					RobotConst.LEFT_MOTOR_ORIENTATION,  RobotMap.LEFT_FOLLOWER_CAN_ADDRESS), 
+//			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.RIGHT_MOTOR_CAN_ADDRESS, 
+//					RobotConst.RIGHT_MOTOR_ORIENTATION, RobotMap.RIGHT_FOLLOWER_CAN_ADDRESS),
+//			RobotConst.DRIVE_GYRO_PID_KP,
+//			RobotConst.DRIVE_GYRO_PID_KI);
+//		
+//		super.setEncoders(
+//				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.NOT_INVERTED,
+//				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.INVERTED,
+//				RobotConst.DRIVE_SPEED_PID_KP,
+//				RobotConst.MAX_LOW_GEAR_SPEED);
 		
 		// Uncomment this constructor to use PWM based Speed controllers
-//		super(
-//				new TAnalogGyro(0, RobotConst.INVERTED),
-//				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.LEFT_MOTOR_PWM_PORT,  RobotConst.NOT_INVERTED, RobotMap.LEFT_FOLLOWER_PWM_PORT), 
-//				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.RIGHT_MOTOR_PWM_PORT, RobotConst.INVERTED,     RobotMap.RIGHT_FOLLOWER_PWM_PORT), 
-//				new TPwmEncoder(0, 1, RobotConst.NOT_INVERTED),
-//				new TPwmEncoder(2, 3, RobotConst.INVERTED),
-//				1.0,
-//				0.1,
-//				RobotConst.MAX_DRIVE_ENCODER_SPEED);
+		super(
+				new TAnalogGyro(0, RobotConst.INVERTED),
+				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.LEFT_MOTOR_PWM_PORT,  RobotConst.LEFT_MOTOR_ORIENTATION, RobotMap.LEFT_FOLLOWER_PWM_PORT), 
+				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.RIGHT_MOTOR_PWM_PORT, RobotConst.RIGHT_MOTOR_ORIENTATION,RobotMap.RIGHT_FOLLOWER_PWM_PORT), 
+				new TPwmEncoder(0, 1, RobotConst.LEFT_ENCODER_ORIENTATION),
+				new TPwmEncoder(2, 3, RobotConst.RIGHT_ENCODER_ORIENTATION),
+				RobotConst.DRIVE_SPEED_PID_KP,
+				RobotConst.MAX_LOW_GEAR_SPEED,
+				RobotConst.DRIVE_GYRO_PID_KP, 
+				RobotConst.DRIVE_GYRO_PID_KI);
 	}
 
 	@Override
 	public void init() {
 		TAnalogGyro gyro = (TAnalogGyro) super.gyro;
 		gyro.setSensitivity(0.0017);
-		
-		turboEnabled = false;
-		shifter.set(LOW_GEAR);
-		this.setMaxEncoderSpeed(RobotConst.MAX_LOW_GEAR_SPEED);
+		disableTurbo();
 	};
 
 	// Initialize the default command for the Chassis subsystem.
@@ -76,13 +75,15 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 	// Turbo routines
 	//********************************************************************************************************************
 	public void enableTurbo() {
-		this.turboEnabled = true;
-		shifter.set(true);
+		turboEnabled = true;
+		setMaxEncoderSpeed(RobotConst.MAX_HIGH_GEAR_SPEED);
+		shifter.set(HIGH_GEAR);
 	}
 	
 	public void disableTurbo() {
-		this.turboEnabled = false;
-		shifter.set(false);
+		turboEnabled = false;
+		setMaxEncoderSpeed(RobotConst.MAX_LOW_GEAR_SPEED);
+		shifter.set(LOW_GEAR);
 	}
 	
 	//********************************************************************************************************************
