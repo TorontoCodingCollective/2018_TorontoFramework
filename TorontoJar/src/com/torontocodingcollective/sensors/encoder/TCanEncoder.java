@@ -28,7 +28,7 @@ public class TCanEncoder extends TEncoder {
 
 	@Override
 	public double getRate() {
-		return super.get(canEncoder.getSelectedSensorVelocity(0));
+		return super.getRate(canEncoder.getSelectedSensorVelocity(0));
 	}
 
 }

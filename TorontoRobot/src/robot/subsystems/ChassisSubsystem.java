@@ -1,9 +1,8 @@
 package robot.subsystems;
 
-import com.torontocodingcollective.sensors.encoder.TPwmEncoder;
 import com.torontocodingcollective.sensors.gyro.TAnalogGyro;
-import com.torontocodingcollective.speedcontroller.TPwmSpeedController;
-import com.torontocodingcollective.speedcontroller.TPwmSpeedControllerType;
+import com.torontocodingcollective.speedcontroller.TCanSpeedController;
+import com.torontocodingcollective.speedcontroller.TCanSpeedControllerType;
 import com.torontocodingcollective.subsystem.TGryoDriveSubsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -30,32 +29,32 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 	public ChassisSubsystem() {
 		
 		// Uncomment this block to use CAN based speed controllers
-//		super(
-//			new TAnalogGyro(0, RobotConst.INVERTED),
-//			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.LEFT_MOTOR_CAN_ADDRESS,  
-//					RobotConst.LEFT_MOTOR_ORIENTATION,  RobotMap.LEFT_FOLLOWER_CAN_ADDRESS), 
-//			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.RIGHT_MOTOR_CAN_ADDRESS, 
-//					RobotConst.RIGHT_MOTOR_ORIENTATION, RobotMap.RIGHT_FOLLOWER_CAN_ADDRESS),
-//			RobotConst.DRIVE_GYRO_PID_KP,
-//			RobotConst.DRIVE_GYRO_PID_KI);
-//		
-//		super.setEncoders(
-//				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.NOT_INVERTED,
-//				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.INVERTED,
-//				RobotConst.DRIVE_SPEED_PID_KP,
-//				RobotConst.MAX_LOW_GEAR_SPEED);
+		super(
+			new TAnalogGyro(0),
+			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.LEFT_MOTOR_CAN_ADDRESS,  
+					RobotConst.LEFT_MOTOR_ORIENTATION,  RobotMap.LEFT_FOLLOWER_CAN_ADDRESS), 
+			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.RIGHT_MOTOR_CAN_ADDRESS, 
+					RobotConst.RIGHT_MOTOR_ORIENTATION, RobotMap.RIGHT_FOLLOWER_CAN_ADDRESS),
+			RobotConst.DRIVE_GYRO_PID_KP,
+			RobotConst.DRIVE_GYRO_PID_KI);
+		
+		super.setEncoders(
+				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.LEFT_ENCODER_ORIENTATION,
+				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.RIGHT_ENCODER_ORIENTATION,
+				RobotConst.DRIVE_SPEED_PID_KP,
+				RobotConst.MAX_LOW_GEAR_SPEED);
 		
 		// Uncomment this constructor to use PWM based Speed controllers
-		super(
-				new TAnalogGyro(0, RobotConst.INVERTED),
-				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.LEFT_MOTOR_PWM_PORT,  RobotConst.LEFT_MOTOR_ORIENTATION, RobotMap.LEFT_FOLLOWER_PWM_PORT), 
-				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.RIGHT_MOTOR_PWM_PORT, RobotConst.RIGHT_MOTOR_ORIENTATION,RobotMap.RIGHT_FOLLOWER_PWM_PORT), 
-				new TPwmEncoder(0, 1, RobotConst.LEFT_ENCODER_ORIENTATION),
-				new TPwmEncoder(2, 3, RobotConst.RIGHT_ENCODER_ORIENTATION),
-				RobotConst.DRIVE_SPEED_PID_KP,
-				RobotConst.MAX_LOW_GEAR_SPEED,
-				RobotConst.DRIVE_GYRO_PID_KP, 
-				RobotConst.DRIVE_GYRO_PID_KI);
+//		super(
+//				new TAnalogGyro(0, RobotConst.INVERTED),
+//				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.LEFT_MOTOR_PWM_PORT,  RobotConst.LEFT_MOTOR_ORIENTATION, RobotMap.LEFT_FOLLOWER_PWM_PORT), 
+//				new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, RobotMap.RIGHT_MOTOR_PWM_PORT, RobotConst.RIGHT_MOTOR_ORIENTATION,RobotMap.RIGHT_FOLLOWER_PWM_PORT), 
+//				new TPwmEncoder(0, 1, RobotConst.LEFT_ENCODER_ORIENTATION),
+//				new TPwmEncoder(2, 3, RobotConst.RIGHT_ENCODER_ORIENTATION),
+//				RobotConst.DRIVE_SPEED_PID_KP,
+//				RobotConst.MAX_LOW_GEAR_SPEED,
+//				RobotConst.DRIVE_GYRO_PID_KP, 
+//				RobotConst.DRIVE_GYRO_PID_KI);
 	}
 
 	@Override
@@ -84,6 +83,10 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 		turboEnabled = false;
 		setMaxEncoderSpeed(RobotConst.MAX_LOW_GEAR_SPEED);
 		shifter.set(LOW_GEAR);
+	}
+	
+	public boolean isTurboEnabled() {
+		return turboEnabled;
 	}
 	
 	//********************************************************************************************************************
