@@ -39,8 +39,8 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 			RobotConst.DRIVE_GYRO_PID_KI);
 		
 		super.setEncoders(
-				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.NOT_INVERTED,
-				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.INVERTED,
+				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.LEFT_ENCODER_ORIENTATION,
+				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.RIGHT_ENCODER_ORIENTATION,
 				RobotConst.DRIVE_SPEED_PID_KP,
 				RobotConst.MAX_LOW_GEAR_SPEED);
 		
