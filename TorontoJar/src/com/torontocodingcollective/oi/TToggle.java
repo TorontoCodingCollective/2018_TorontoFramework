@@ -5,6 +5,7 @@ public class TToggle {
 	private boolean toggleState;
 	private final TGameController gameController;
 	private final TButton button;
+	private final TStick  stick;
 	private boolean previousButtonState;
 	
 	public TToggle(TGameController gameController, TButton button) {
@@ -14,8 +15,21 @@ public class TToggle {
 	public TToggle(TGameController gameController, TButton button, boolean initialState) {
 		this.gameController = gameController;
 		this.button = button;
+		this.stick = null;
 		this.toggleState = initialState;
 		this.previousButtonState = gameController.getButton(button);
+	}
+	
+	public TToggle(TGameController gameController, TStick stick) {
+		this(gameController, stick, false);
+	}
+	
+	public TToggle(TGameController gameController, TStick stick, boolean initialState) {
+		this.gameController = gameController;
+		this.button = null;
+		this.stick = stick;
+		this.toggleState = initialState;
+		this.previousButtonState = gameController.getButton(stick);
 	}
 	
 	/**
@@ -41,9 +55,19 @@ public class TToggle {
 	 * toggle based on the game controller and button.
 	 */
 	public void updatePeriodic(){
-		if (gameController.getButton(button) && !previousButtonState){
+		
+		boolean curButtonState = false;
+		
+		if (button != null) {
+			curButtonState = gameController.getButton(button);
+		}
+		if (stick != null) {
+			curButtonState = gameController.getButton(stick);
+		}
+		
+		if (curButtonState && !previousButtonState){
 			toggleState = !toggleState;
 		}
-		previousButtonState = gameController.getButton(button);
+		previousButtonState = curButtonState;
 	}
 }

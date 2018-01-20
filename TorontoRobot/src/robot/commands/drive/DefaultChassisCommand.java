@@ -1,9 +1,8 @@
-package robot.commands;
+package robot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import robot.Robot;
-import robot.commands.drive.DriveDirectionCommand;
 
 /**
  *
@@ -24,6 +23,13 @@ public class DefaultChassisCommand extends Command {
 	@Override
 	protected void execute() {
 		
+		if (Robot.oi.getTurboOn()) {
+			Robot.chassisSubsystem.enableTurbo();
+		}
+		else {
+			Robot.chassisSubsystem.disableTurbo();
+		}
+		
 		if (Robot.oi.getPidOn()) {
 			Robot.chassisSubsystem.enableSpeedPids();
 		}
@@ -37,16 +43,6 @@ public class DefaultChassisCommand extends Command {
 		
 		if (Robot.oi.getStartDriveDirection()) {
 			Scheduler.getInstance().add(new DriveDirectionCommand(0, .2));
-		}
-		if (Robot.oi.getArcCommand() == 90){
-			Scheduler.getInstance().add(new ArcCommand(200, Robot.chassisSubsystem.getGryoAngle(), Robot.chassisSubsystem.getGryoAngle() - 90, 0.4));
-		}
-		if (Robot.oi.getArcCommand() == 270){
-			Scheduler.getInstance().add(new ArcCommand(200, Robot.chassisSubsystem.getGryoAngle(), Robot.chassisSubsystem.getGryoAngle() + 90, 0.4));
-		}
-		if (Robot.oi.reset()){
-			Robot.chassisSubsystem.resetGyroAngle();
-			Robot.chassisSubsystem.resetEncoders();
 		}
 		
 		double speed = Robot.oi.getSpeed();

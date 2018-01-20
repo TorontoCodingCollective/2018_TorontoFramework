@@ -5,8 +5,7 @@ import com.torontocodingcollective.oi.TButton;
 import com.torontocodingcollective.oi.TGameController;
 import com.torontocodingcollective.oi.TGameController_Logitech;
 import com.torontocodingcollective.oi.TStick;
-
-import edu.wpi.first.wpilibj.Joystick;
+import com.torontocodingcollective.oi.TToggle;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -16,6 +15,7 @@ public class OI {
 	
 	private TGameController gameController = new TGameController_Logitech(0);
 	
+	private TToggle pneumaticsToggle = new TToggle(gameController, TStick.LEFT);
 	
 	public double getSpeed() {
 		return - gameController.getAxis(TStick.LEFT, TAxis.Y);
@@ -48,6 +48,19 @@ public class OI {
 	}
 	public boolean reset(){
 		return gameController.getButton(TButton.START);
+	}
+	
+	public boolean getTurboOn() {
+		return gameController.getButton(TButton.LEFT_BUMPER);
+	}
+	
+	public boolean getCompressorEnabled() {
+		return pneumaticsToggle.get();
+	}
+	
+	
+	public void updatePeriodic() {
+		pneumaticsToggle.updatePeriodic();
 	}
 	
 	//// CREATING BUTTONS

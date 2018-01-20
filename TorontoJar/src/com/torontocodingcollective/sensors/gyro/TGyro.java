@@ -4,22 +4,25 @@ import edu.wpi.first.wpilibj.GyroBase;
 
 public abstract class TGyro extends GyroBase {
 
-	private boolean inverted;
+	private boolean isInverted;
 	private double offset = 0;
 	
 	public TGyro(boolean inverted) {
-		this.inverted = inverted;
+		this.isInverted = inverted;
 	}
 	
 	protected boolean isInverted() {
-		return inverted;
+		return isInverted;
 	}
 	
 	public void resetGyroAngle() {
-		resetGyroAngle(0);
+		setGyroAngle(0);
 	}
+	
+	public abstract double getRate();
+	public abstract double getAngle();
 
-	public void resetGyroAngle(double angle) {
+	public void setGyroAngle(double angle) {
 		
 		// clear the previous offset
 		offset = 0;
@@ -35,7 +38,7 @@ public abstract class TGyro extends GyroBase {
 	}
 	
 	protected double getRate(double rawRate) {
-		if (inverted) {
+		if (isInverted) {
 			return -rawRate;
 		}
 		
@@ -45,7 +48,7 @@ public abstract class TGyro extends GyroBase {
 	protected double getAngle(double rawAngle) {
 		
 		// Invert before subtracting the offset.
-		if (inverted) {
+		if (isInverted) {
 			rawAngle = -rawAngle;
 		}
 
