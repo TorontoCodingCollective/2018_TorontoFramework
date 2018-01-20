@@ -41,11 +41,14 @@ public class OI {
 		return gameController.getButton(TButton.B);
 	}
 	public int getArcCommand(){
+		System.out.println("getting pov");
 		return gameController.getPOV();
 	}
+	
 	public boolean getCancelCommand(){
 		return gameController.getButton(TButton.BACK);
 	}
+	
 	public boolean reset(){
 		return gameController.getButton(TButton.START);
 	}

@@ -8,8 +8,8 @@ public class RobotConst {
 	//*********************************************************
 	// Drive Constants
 	//*********************************************************
-	public static final boolean RIGHT_MOTOR_ORIENTATION = INVERTED;
-	public static final boolean LEFT_MOTOR_ORIENTATION = NOT_INVERTED;
+	public static final boolean RIGHT_MOTOR_ORIENTATION = NOT_INVERTED;
+	public static final boolean LEFT_MOTOR_ORIENTATION = INVERTED;
 	
 	public static final boolean RIGHT_ENCODER_ORIENTATION = INVERTED;
 	public static final boolean LEFT_ENCODER_ORIENTATION = NOT_INVERTED;
