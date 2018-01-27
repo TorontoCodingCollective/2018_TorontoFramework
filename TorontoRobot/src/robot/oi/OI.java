@@ -17,6 +17,8 @@ public class OI {
 
 	private TToggle pneumaticsToggle = new TToggle(gameController, TStick.LEFT);
 	private TToggle pidToggle = new TToggle(gameController, TStick.RIGHT);
+	
+	private AutoSelector autoSelector = new AutoSelector();
 
 	public double getSpeed() {
 		return - gameController.getAxis(TStick.LEFT, TAxis.Y);
@@ -61,6 +63,7 @@ public class OI {
 	public void updatePeriodic() {
 		pneumaticsToggle.updatePeriodic();
 		pidToggle.updatePeriodic();
+		autoSelector.updatePeriodic();
 	}
 
 }

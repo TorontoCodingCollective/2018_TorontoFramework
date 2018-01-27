@@ -294,6 +294,12 @@ public abstract class TDriveSubsystem extends TSubsystem {
 				SmartDashboard.putNumber("Right Motor", rightSpeedPid.get());
 		
 			}
+			else {
+
+				SmartDashboard.putNumber("Left Motor", leftMotor.get());
+				SmartDashboard.putNumber("Right Motor", rightMotor.get());
+				
+			}
 		
 			// Update all SmartDashboard values
 			SmartDashboard.putBoolean("Speed PIDs Active", speedPidsActive);
