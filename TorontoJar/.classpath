@@ -8,5 +8,7 @@
 	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix-sources.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Richard/wpilib/user/java/lib/navx_frc.jar"/>
+	<classpathentry kind="var" path="navX"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
