@@ -4,9 +4,8 @@ package robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import robot.commands.drive.DefaultChassisCommand;
+import robot.commands.AutonomousCommand;
+import robot.oi.GameData;
 import robot.oi.OI;
 import robot.subsystems.ChassisSubsystem;
 import robot.subsystems.PneumaticsSubsystem;
@@ -24,9 +23,10 @@ public class Robot extends IterativeRobot {
 	public static final PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
 	public static OI oi;
 
-	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	public static GameData gameData = new GameData();
 
+	private Command autoCommand;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -34,10 +34,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		chooser.addDefault("Default Auto", new DefaultChassisCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
-		
+
 		chassisSubsystem.init();
 		pneumaticsSubsystem.init();
 	}
@@ -71,18 +68,26 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		
+		// Initialize the game data
+		gameData.init();
 
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
+		System.out.println("Close Switch : " + gameData.getCloseSwitch());
+		System.out.println("Scale        : " + gameData.getScale());
+		System.out.println("Far Switch   : " + gameData.getFarSwitch());
 
-		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		// Turn on the drive pids
+		Robot.oi.setSpeedPidToggle(true);
+		chassisSubsystem.enableSpeedPids();
+		
+		// Reset the gyro and the encoders
+		Robot.chassisSubsystem.setGyroAngle(0);
+		Robot.chassisSubsystem.resetEncoders();
+				
+		// Initialize the robot command after initializing the game data
+		// because the game data will be used in the auto command.
+		autoCommand = new AutonomousCommand();
+		autoCommand.start();
 	}
 
 	/**
@@ -90,18 +95,29 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
+		// Update the OI before running the commands
+		oi.updatePeriodic();
+		
 		Scheduler.getInstance().run();
+
+		// Update all subsystems after running commands
 		updatePeriodic();
 	}
 
 	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
-		if (autonomousCommand != null)
-			autonomousCommand.cancel();
+		
+		if (autoCommand != null) {
+			autoCommand.cancel();
+		}
+
+		// Turn off the drive PIDs
+		// Save the battery in teleop by using the 
+		// SpeedController built in braking.
+		Robot.oi.setSpeedPidToggle(false);
+		chassisSubsystem.disableSpeedPids();
+
 	}
 
 	/**
@@ -109,7 +125,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		// Update the OI before running the commands
+		oi.updatePeriodic();
+		
 		Scheduler.getInstance().run();
+		
+		// Update all subsystems after running commands
 		updatePeriodic();
 	}
 
@@ -123,6 +145,5 @@ public class Robot extends IterativeRobot {
 	private void updatePeriodic() {
 		chassisSubsystem.updatePeriodic();
 		pneumaticsSubsystem.updatePeriodic();
-		oi.updatePeriodic();
 	}
 }

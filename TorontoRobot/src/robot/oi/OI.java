@@ -60,6 +60,14 @@ public class OI {
 		return pidToggle.get();
 	}
 	
+	public void setSpeedPidToggle(boolean state) {
+		pidToggle.set(state);
+	}
+	
+	public char getRobotStartPosition() {
+		return autoSelector.getRobotStartPosition();
+	}
+	
 	public void updatePeriodic() {
 		pneumaticsToggle.updatePeriodic();
 		pidToggle.updatePeriodic();
