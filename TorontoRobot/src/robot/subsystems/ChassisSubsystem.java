@@ -1,9 +1,10 @@
 package robot.subsystems;
 
+import com.torontocodingcollective.sensors.encoder.TEncoder;
 import com.torontocodingcollective.sensors.gyro.TAnalogGyro;
+import com.torontocodingcollective.sensors.gyro.TNavXGyro;
 import com.torontocodingcollective.speedcontroller.TCanSpeedController;
 import com.torontocodingcollective.speedcontroller.TCanSpeedControllerType;
-import com.torontocodingcollective.sensors.gyro.TNavXGyro;
 import com.torontocodingcollective.subsystem.TGryoDriveSubsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -41,9 +42,13 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 			RobotConst.DRIVE_GYRO_PID_KP,
 			RobotConst.DRIVE_GYRO_PID_KI);
 		
+		// Get the encoders attached to the CAN bus speed controller.
+		TEncoder leftEncoder  = ((TCanSpeedController) super.leftMotor) .getEncoder();
+		TEncoder rightEncoder = ((TCanSpeedController) super.rightMotor).getEncoder();
+
 		super.setEncoders(
-				((TCanSpeedController) super.leftMotor) .getEncoder(), RobotConst.LEFT_ENCODER_ORIENTATION,
-				((TCanSpeedController) super.rightMotor).getEncoder(), RobotConst.RIGHT_ENCODER_ORIENTATION,
+				leftEncoder,  RobotConst.LEFT_ENCODER_ORIENTATION,
+				rightEncoder, RobotConst.RIGHT_ENCODER_ORIENTATION,
 				RobotConst.DRIVE_SPEED_PID_KP,
 				RobotConst.MAX_LOW_GEAR_SPEED);
 		
