@@ -8,5 +8,6 @@
 	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix-sources.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix.jar"/>
+	<classpathentry kind="var" path="navx"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

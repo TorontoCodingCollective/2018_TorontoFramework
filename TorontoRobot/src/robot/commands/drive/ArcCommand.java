@@ -59,22 +59,37 @@ public class ArcCommand extends TSafeCommand {
 	}
 
 	protected boolean isFinished() {
+
 		if (super.isFinished()) {
 			return true;
 		}
-		double error = Robot.chassisSubsystem.getGryoAngle() - this.endDirection;
-		if (this.turnangle < 0) {
-			error -= 26;//2 is the normal
+		
+		double error = this.endDirection - Robot.chassisSubsystem.getGryoAngle();
+		
+		if (Robot.chassisSubsystem.isTurboEnabled()) {
+			if (this.turnangle < 0) {
+				error += 26;
+			}
+			else if (this.turnangle > 0) {
+				error -= 50;
+			}
 		}
-		else if (this.turnangle > 0) {
-			error += 50;//2 is tne normal
+		else {
+			if (this.turnangle < 0) {
+				error += 2;
+			}
+			else if (this.turnangle > 0) {
+				error -= 2;
+			}
 		}
+
 		if (error > 180) {
 			error -= 360;
 		}
 		else if (error < -180) {
 			error += 360;
 		}
+		
 		if (Math.abs(error) <= 2) {
 			return true;
 		}

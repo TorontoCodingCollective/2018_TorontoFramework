@@ -20,6 +20,8 @@ build/
 
 dist/
 
+doc/
+
 
 *.class
 

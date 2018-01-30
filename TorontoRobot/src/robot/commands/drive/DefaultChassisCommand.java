@@ -23,13 +23,21 @@ public class DefaultChassisCommand extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+
+
 		if (Robot.oi.getTurboOn()) {
 			Robot.chassisSubsystem.enableTurbo();
 		}
 		else {
 			Robot.chassisSubsystem.disableTurbo();
 		}
-		if (Robot.oi.getSpeedPIDEnabled()) {
+		
+		if (Robot.oi.reset()){
+			Robot.chassisSubsystem.resetGyroAngle();
+			Robot.chassisSubsystem.resetEncoders();
+		}
+
+		if (Robot.oi.getSpeedPidEnabled()) {
 			Robot.chassisSubsystem.enableSpeedPids();
 		}
 		else {
@@ -50,11 +58,6 @@ public class DefaultChassisCommand extends Command {
 		if (Robot.oi.getArcCommand() == 270){
 			Scheduler.getInstance().add(new ArcCommand(200, Robot.chassisSubsystem.getGryoAngle(), Robot.chassisSubsystem.getGryoAngle() - 90, 1));
 		}
-		if (Robot.oi.reset()){
-			Robot.chassisSubsystem.resetGyroAngle();
-			Robot.chassisSubsystem.resetEncoders();
-		}
-
 
 		double speed = Robot.oi.getSpeed();
 		double turn  = Robot.oi.getTurn();

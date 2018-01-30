@@ -3,6 +3,7 @@ package robot.subsystems;
 import com.torontocodingcollective.sensors.gyro.TAnalogGyro;
 import com.torontocodingcollective.speedcontroller.TCanSpeedController;
 import com.torontocodingcollective.speedcontroller.TCanSpeedControllerType;
+import com.torontocodingcollective.sensors.gyro.TNavXGyro;
 import com.torontocodingcollective.subsystem.TGryoDriveSubsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,8 +30,10 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 	public ChassisSubsystem() {
 		
 		// Uncomment this block to use CAN based speed controllers
-		super(
-			new TAnalogGyro(0),
+		// Uncomment this constructor to use PWM based Speed controllers
+		super(	
+			(RobotConst.robot == 1311 ? new TNavXGyro() : new TAnalogGyro(0)),
+//			new TAnalogGyro(0),
 			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.LEFT_MOTOR_CAN_ADDRESS,  
 					RobotConst.LEFT_MOTOR_ORIENTATION,  RobotMap.LEFT_FOLLOWER_CAN_ADDRESS), 
 			new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, RobotMap.RIGHT_MOTOR_CAN_ADDRESS, 
@@ -59,8 +62,11 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 
 	@Override
 	public void init() {
-		TAnalogGyro gyro = (TAnalogGyro) super.gyro;
-		gyro.setSensitivity(0.0017);
+		
+		if (RobotConst.robot == 1321) {
+			TAnalogGyro gyro = (TAnalogGyro) super.gyro;
+			gyro.setSensitivity(0.0017);
+		}
 		disableTurbo();
 	};
 
@@ -83,6 +89,10 @@ public class ChassisSubsystem extends TGryoDriveSubsystem {
 		turboEnabled = false;
 		setMaxEncoderSpeed(RobotConst.MAX_LOW_GEAR_SPEED);
 		shifter.set(LOW_GEAR);
+	}
+	
+	public boolean isTurboEnabled() {
+		return turboEnabled;
 	}
 	
 	//********************************************************************************************************************

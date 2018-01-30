@@ -51,7 +51,7 @@ public abstract class TEncoder {
 	protected int get(int rawDistance) {
 		
 		if (isInverted) {
-			return - rawDistance;
+			rawDistance = - rawDistance;
 		}
 		
 		return rawDistance + offset;
