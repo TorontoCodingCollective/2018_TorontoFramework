@@ -29,8 +29,8 @@ public class ArcCommand extends TSafeCommand {
 		if (this.endDirection < 0) {
 			this.endDirection += 360;
 		}
-		System.out.println(this.turnangle);
-		System.out.println(this.endDirection);
+		//System.out.println(this.turnangle);
+		//System.out.println(this.endDirection);
 		requires(Robot.chassisSubsystem);
 	}
 	
@@ -53,12 +53,13 @@ public class ArcCommand extends TSafeCommand {
 			this.lSpeed = fastSpeed;
 			this.rSpeed = slowSpeed;
 		}
-		System.out.println(this.rSpeed); 
-		System.out.println(this.lSpeed);
+		//System.out.println(this.rSpeed); 
+		//System.out.println(this.lSpeed);
 		Robot.chassisSubsystem.setSpeed(lSpeed, rSpeed);
 	}
 
 	protected boolean isFinished() {
+
 		if (super.isFinished()) {
 			return true;
 		}
@@ -92,7 +93,6 @@ public class ArcCommand extends TSafeCommand {
 		if (Math.abs(error) <= 2) {
 			return true;
 		}
-		
 		return false;
 	}
 
