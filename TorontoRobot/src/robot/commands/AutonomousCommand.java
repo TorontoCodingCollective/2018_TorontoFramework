@@ -2,6 +2,7 @@ package robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import robot.Robot;
+import robot.commands.drive.ArcCommand;
 
 /**
  *
@@ -31,5 +32,8 @@ public class AutonomousCommand extends CommandGroup {
     	System.out.println("--------------------------");
     	System.out.println("Robot Position : " + Robot.oi.getRobotStartPosition());
     	System.out.println("Close Switch   : " + Robot.gameData.getCloseSwitch());
+    	
+    	addSequential(new ArcCommand(100, 0, 310, 1.0));
+    	addSequential(new ArcCommand(140, 310, 350, 1.0));
     }
 }

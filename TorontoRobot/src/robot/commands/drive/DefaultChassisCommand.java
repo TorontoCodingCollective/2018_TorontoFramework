@@ -48,7 +48,7 @@ public class DefaultChassisCommand extends Command {
 		}
 
 		if (Robot.oi.getStartDriveDirection()) {
-			Scheduler.getInstance().add(new DriveDirectionCommand(0, .2));
+			Scheduler.getInstance().add(new DriveDirectionCommand(0, .8, 10));
 		}
 
 		if (Robot.oi.getArcCommand() == 90){
