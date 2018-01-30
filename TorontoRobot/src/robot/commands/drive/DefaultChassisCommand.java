@@ -46,7 +46,7 @@ public class DefaultChassisCommand extends Command {
 
 
 		if (Robot.oi.getForwardThrust()) {
-			Scheduler.getInstance().add(new ForwardThrustCommand(0));
+			Scheduler.getInstance().add(new DriveTimeCommand(0));
 		}
 
 		if (Robot.oi.getStartDriveDirection()) {

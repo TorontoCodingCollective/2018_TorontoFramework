@@ -5,9 +5,9 @@ import robot.Robot;
 /**
  *
  */
-public class ForwardThrustCommand extends TSafeCommand {
+public class DriveTimeCommand extends TSafeCommand {
 
-    public ForwardThrustCommand(double maxTimeSec) {
+    public DriveTimeCommand(double maxTimeSec) {
     	super(maxTimeSec);
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.chassisSubsystem);
