@@ -1,17 +1,26 @@
 package robot.commands.drive;
 
-import edu.wpi.first.wpilibj.command.Command;
 import robot.Robot;
 
 /**
  *
  */
-public class DriveDirectionCommand extends Command {
+public class DriveDirectionCommand extends TSafeCommand {
 
-	private double direction;
-	private double speed;
+	private double  direction;
+	private double  speed;
+	private boolean brakeWhenFinished = true;
 	
-    public DriveDirectionCommand(double direction, double speed) {
+    public DriveDirectionCommand(double direction, double speed, 
+    		double timeout) {
+    	this(direction, speed, timeout, true);
+    }
+    	
+    public DriveDirectionCommand(double direction, double speed, 
+    		double timeout, boolean brakeWhenFinished) {
+    	
+    	super(timeout);
+    	
     	this.direction = direction;
     	this.speed     = speed;
     	
@@ -49,9 +58,11 @@ public class DriveDirectionCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (timeSinceInitialized() > 5) { 
-    		return true; 
-		}
+    	
+    	if (super.isFinished()) {
+    		return true;
+    	}
+
     	return false;
     }
 
@@ -59,7 +70,10 @@ public class DriveDirectionCommand extends Command {
     protected void end() {
 
     	Robot.chassisSubsystem.disableGyroPid();
-    	Robot.chassisSubsystem.setSpeed(0, 0);
+    	
+    	if (brakeWhenFinished) {
+    		Robot.chassisSubsystem.setSpeed(0, 0);
+    	}
     	
     }
 
