@@ -46,7 +46,7 @@ public class DefaultChassisCommand extends Command {
 
 
 		if (Robot.oi.getForwardThrust()) {
-			Scheduler.getInstance().add(new DriveTimeCommand(0));
+			Scheduler.getInstance().add(new DriveDistanceCommand(50, Robot.chassisSubsystem.getGryoAngle(), 0.5, 5.0, true));
 		}
 
 		if (Robot.oi.getStartDriveDirection()) {

@@ -11,7 +11,7 @@ public class DriveDistanceCommand extends DriveDirectionCommand {
 		this.distance = distance;
 	}
 	protected void initialize() {
-
+		//System.out.println("starting drive");
 		Robot.chassisSubsystem.resetEncoders();
 
 	}
@@ -20,7 +20,8 @@ public class DriveDistanceCommand extends DriveDirectionCommand {
 		if (super.isFinished()) {
 			return true;
 		}
-		if (distance * RobotConst.ENCODER_COUNTS_PER_INCH >= Robot.chassisSubsystem.getEncoderDistance() + 20){
+		if (distance * RobotConst.ENCODER_COUNTS_PER_INCH < Robot.chassisSubsystem.getEncoderDistance() + 20){
+			//System.out.println("ending drive");
 			return true;
 		}
 		return false;
