@@ -4,9 +4,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class GameData {
 
-	char closeSwitch = 'L';
-	char scale = 'L';
-	char farSwitch = 'L';
+	public static final char LEFT = 'L';
+	public static final char RIGHT = 'R';
+	
+	private static char closeSwitch = LEFT;
+	private static char scale       = LEFT;
+	private static char farSwitch   = LEFT;
 	
 	/** 
 	 * Initialize the Game Data based on information from the driver station.
@@ -21,51 +24,50 @@ public class GameData {
 	 * The default switch setup for all switches is L = Left if there is no
 	 * corresponding valid data in the DriverStation for that switch.
 	 */
-	public void init() {
+	public static void init() {
 		
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		if (gameData.length() >= 1) {
 			char c = gameData.charAt(0);
 			if (c == 'L' || c == 'l') {
-				closeSwitch ='L';
+				closeSwitch = LEFT;
 			}
 			if (c == 'R' || c == 'r') {
-				closeSwitch ='R';
+				closeSwitch = RIGHT;
 			}
 		}
 		
 		if (gameData.length() >= 2) {
 			char c = gameData.charAt(1);
 			if (c == 'L' || c == 'l') {
-				scale ='L';
+				scale = LEFT;
 			}
 			if (c == 'R' || c == 'r') {
-				scale ='R';
+				scale = RIGHT;
 			}
 		}
 		
 		if (gameData.length() >= 3) {
 			char c = gameData.charAt(2);
 			if (c == 'L' || c == 'l') {
-				farSwitch ='L';
+				farSwitch = LEFT;
 			}
 			if (c == 'R' || c == 'r') {
-				farSwitch ='R';
+				farSwitch = RIGHT;
 			}
 		}
 	}
 	
-	public char getCloseSwitch() {
+	public static char getCloseSwitch() {
 		return closeSwitch;
 	}
 
-	public char getFarSwitch() {
+	public static char getFarSwitch() {
 		return farSwitch;
 	}
 
-	
-	public char getScale() {
+	public static char getScale() {
 		return scale;
 	}
 
