@@ -5,7 +5,7 @@ import robot.Robot;
 
 public class TSafeCommand extends Command {
 
-	private final double maxTimeSec;
+	private final double maxTimeSec; // in seconds
 	
 	public TSafeCommand(double maxTimeSec) {
 		this.maxTimeSec = maxTimeSec;

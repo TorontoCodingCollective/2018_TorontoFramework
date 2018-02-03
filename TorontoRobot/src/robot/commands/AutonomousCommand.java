@@ -2,6 +2,7 @@ package robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import robot.Robot;
+import robot.commands.drive.DriveDirectionCommand;
 import robot.commands.drive.MotionProfileCommand;
 
 /**
@@ -33,7 +34,8 @@ public class AutonomousCommand extends CommandGroup {
     	System.out.println("Robot Position : " + Robot.oi.getRobotStartPosition());
     	System.out.println("Close Switch   : " + Robot.gameData.getCloseSwitch());
     	
-    	addSequential(new MotionProfileCommand(5));
+    	addSequential(new DriveDirectionCommand(0, .5, 5));
+//    	addSequential(new MotionProfileCommand(5));
 //    	addSequential(new ArcCommand(100, 0, 310, 1.0));
 //    	addSequential(new ArcCommand(140, 310, 350, 1.0));
     }

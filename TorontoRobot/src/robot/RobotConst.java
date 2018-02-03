@@ -1,5 +1,7 @@
 package robot;
 
+import edu.wpi.first.wpilibj.Relay.Direction;
+
 public class RobotConst {
 	
 	// The TorontoCodingCollective framework was developed to run on different
@@ -28,6 +30,8 @@ public class RobotConst {
 	public static final double DRIVE_SPEED_PID_KP;
 	public static final double ENCODER_COUNTS_PER_INCH;
 
+	public static enum Direction { FORWARD, BACKWARD };
+	
 	static {
 		
 		switch (robot) {

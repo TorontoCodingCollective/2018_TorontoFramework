@@ -13,6 +13,7 @@ public class DriveToUltrasonicCommand extends DriveDirectionCommand {
 	
 	private final double stoppingDistance;
 	private final TUltrasonic ultrasonicSensor;
+	
 	private enum Direction {
 			FORWARD, BACKWARD
 	};
@@ -20,7 +21,7 @@ public class DriveToUltrasonicCommand extends DriveDirectionCommand {
 	private Direction direction;
 
 	public DriveToUltrasonicCommand(double angle, double speed, double stoppingDistance, TUltrasonic ultrasonicSensor) {
-		 super( angle, speed, 15, true);
+		 super(angle, speed, 15);
 		 this.ultrasonicSensor = ultrasonicSensor;
 		 this.stoppingDistance = stoppingDistance;
 		// Use requires() here to declare subsystem dependencies
@@ -33,19 +34,11 @@ public class DriveToUltrasonicCommand extends DriveDirectionCommand {
 		
 		super.initialize();
 		
-		//Where am I now?
+//		Where am I now?
 		double currentDistance = ultrasonicSensor.getDistance();
 		
-		if (currentDistance >= stoppingDistance) {
-			
-			direction = Direction.FORWARD;
-			
-		} else {
-			
-			direction = Direction.BACKWARD;
-		}
-		//Set the direction
-//		super.setDirection(direction);
+		direction = currentDistance >= stoppingDistance ? Direction.FORWARD : Direction.BACKWARD;
+
 	}
 
 	
@@ -56,7 +49,6 @@ public class DriveToUltrasonicCommand extends DriveDirectionCommand {
 	protected boolean isFinished() {
 		double currentDistance = ultrasonicSensor.getDistance();
 		if (currentDistance <= stoppingDistance + STOPPING_DISTANCE) {
-			System.out.println("Finished distance " + currentDistance);
 			return true;
 		}
 		return false;
