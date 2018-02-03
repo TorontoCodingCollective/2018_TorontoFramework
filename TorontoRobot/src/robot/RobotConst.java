@@ -9,6 +9,8 @@ public class RobotConst {
 
 	public static final boolean INVERTED = true;
 	public static final boolean NOT_INVERTED = false;
+	public static final char LEFT = 'L';
+	public static final char RIGHT = 'R';
 
 	//*********************************************************
 	// Drive Constants

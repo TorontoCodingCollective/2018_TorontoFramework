@@ -7,6 +7,8 @@ import com.torontocodingcollective.oi.TGameController_Logitech;
 import com.torontocodingcollective.oi.TStick;
 import com.torontocodingcollective.oi.TToggle;
 
+import robot.RobotConst;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -14,6 +16,7 @@ import com.torontocodingcollective.oi.TToggle;
 public class OI {
 
 	private TGameController gameController = new TGameController_Logitech(0);
+	private TGameController operatorController = new TGameController_Logitech(1);
 
 	private TToggle pneumaticsToggle = new TToggle(gameController, TStick.LEFT);
 	private TToggle pidToggle = new TToggle(gameController, TStick.RIGHT);
@@ -54,24 +57,44 @@ public class OI {
 	public boolean getCompressorEnabled() {
 		return pneumaticsToggle.get();
 	}
-	
+
 	public boolean getSpeedPidEnabled() {
 		return pidToggle.get();
 	}
-	
+
 	public void setSpeedPidToggle(boolean state) {
 		pidToggle.set(state);
 	}
-	
+
 	public char getRobotStartPosition() {
 		return autoSelector.getRobotStartPosition();
 	}
-	
+
+	public boolean getRampUp(char side ) {
+		if (side == RobotConst.LEFT && operatorController.getPOV()==315) {
+			return true;
+		}
+		if (side == RobotConst.RIGHT && operatorController.getPOV() == 45) {
+			return true;
+		}
+		return false;
+	}
+	public boolean getRampDown(char side) {
+		if (side == RobotConst.LEFT && operatorController.getPOV()==225) {
+			return true;
+		}
+		if (side == RobotConst.RIGHT && operatorController.getPOV() == 135) {
+			return true;
+		}
+		return false;
+	}
+
+
 	public void updatePeriodic() {
 		pneumaticsToggle.updatePeriodic();
 		pidToggle.updatePeriodic();
 		autoSelector.updatePeriodic();
 	}
 
-	
+
 }
