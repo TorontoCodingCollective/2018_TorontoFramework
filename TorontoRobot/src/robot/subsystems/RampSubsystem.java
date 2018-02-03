@@ -13,6 +13,7 @@ public class RampSubsystem extends TSubsystem {
 	TPwmSpeedController leftRampMotor = new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, 0, RobotConst.INVERTED, 1);
 	TPwmSpeedController rightRampMotor = new TPwmSpeedController(TPwmSpeedControllerType.VICTOR, 2, RobotConst.INVERTED, 3);
 			
+	
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub

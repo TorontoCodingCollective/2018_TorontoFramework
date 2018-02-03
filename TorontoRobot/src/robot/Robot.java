@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot {
 	public static final RampSubsystem rampSubsystem = new RampSubsystem();
 	public static OI oi;
 	
+	
 	private Command autoCommand;
 	
 	/**

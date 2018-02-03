@@ -5,6 +5,7 @@ import robot.Robot;
 import robot.RobotConst;
 
 
+
 public class DefaultRampCommand extends Command{
 
 	public DefaultRampCommand() {
