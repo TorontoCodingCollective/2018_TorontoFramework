@@ -53,8 +53,6 @@ public class AutonomousCommand extends CommandGroup {
 			System.out.println("Switch is not on our side. Overriding first action to CROSS");
 		}
 
-
-
 		//run the auto
 		if (robotStartPosition.equals(ROBOT_LEFT)) {
 			//robot starts to the left
