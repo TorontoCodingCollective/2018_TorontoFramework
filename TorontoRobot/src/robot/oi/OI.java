@@ -14,7 +14,6 @@ import robot.RobotConst;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	
 
 	private TGameController gameController = new TGameController_Logitech(0);
 	private TGameController operatorController = new TGameController_Logitech(1);
