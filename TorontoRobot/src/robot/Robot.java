@@ -23,8 +23,6 @@ public class Robot extends IterativeRobot {
 	public static final PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
 	public static OI oi;
 
-	public static GameData gameData = new GameData();
-
 	private Command autoCommand;
 	
 	/**
@@ -70,11 +68,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		
 		// Initialize the game data
-		gameData.init();
-
-		System.out.println("Close Switch : " + gameData.getCloseSwitch());
-		System.out.println("Scale        : " + gameData.getScale());
-		System.out.println("Far Switch   : " + gameData.getFarSwitch());
+		GameData.init();
 
 		// Turn on the drive pids
 		Robot.oi.setSpeedPidToggle(true);

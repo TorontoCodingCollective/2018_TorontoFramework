@@ -1,10 +1,10 @@
 package robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import robot.Robot;
 import robot.commands.drive.ArcCommand;
 import robot.commands.drive.DriveDistanceCommand;
 import robot.oi.AutoSelector;
+import robot.oi.GameData;
 
 /**
  *
@@ -27,44 +27,31 @@ public class AutonomousCommand extends CommandGroup {
 		String robotStartPosition 	= AutoSelector.getRobotStartPosition();
 		String firstAction 			= AutoSelector.getRobotFirstAction();
 		String secondAction 		= AutoSelector.getRobotSecondAction();
-		char closeSwitch 			= Robot.gameData.getCloseSwitch();
-		char scale 					= Robot.gameData.getScale();
+		char closeSwitch 			= GameData.getCloseSwitch();
+		char scale 					= GameData.getScale();
 
-		// Add Commands here:
-		// e.g. addSequential(new Command1());
-		//      addSequential(new Command2());
-		// these will run in order.
-
-		// To run multiple commands at the same time,
-		// use addParallel()
-		// e.g. addParallel(new Command1());
-		//      addSequential(new Command2());
-		// Command1 and Command2 will run in parallel.
-
-		// A command group will require all of the subsystems that each member
-		// would require.
-		// e.g. if Command1 requires chassis, and Command2 requires arm,
-		// a CommandGroup containing them would require both the chassis and the
-		// arm.
-
+		// Print out the user selection and Game config for debug later
 		System.out.println("Auto Command Configuration");
 		System.out.println("--------------------------");
 		System.out.println("Robot Position : " + robotStartPosition);
+		System.out.println("First Action   : " + firstAction);
+		System.out.println("Second Action  : " + secondAction);
 		System.out.println("Close Switch   : " + closeSwitch);
 		System.out.println("Scale		   : " + scale);
 
 		//overrides
 		if (robotStartPosition.equals(ROBOT_CENTER) && !firstAction.equals(SWITCH)) {
 			firstAction = SWITCH;
-			System.out.println("overriding first action to switch");
+			System.out.println("Center start must do switch as first action. Overriding first action to SWITCH");
 		}
 		if (robotStartPosition.equals(ROBOT_RIGHT) && secondAction.equals(SWITCH) && firstAction.equals(SWITCH) && closeSwitch == LEFT) {
 			firstAction = CROSS;
+			System.out.println("Switch is not on our side.  Overriding first action to CROSS");
 		}
 		if (robotStartPosition.equals(ROBOT_LEFT) && secondAction.equals(SWITCH) && firstAction.equals(SWITCH) && closeSwitch == RIGHT) {
 			firstAction = CROSS;
+			System.out.println("Switch is not on our side. Overriding first action to CROSS");
 		}
-
 
 
 		//run the auto
