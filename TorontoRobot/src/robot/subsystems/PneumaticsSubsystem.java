@@ -24,6 +24,8 @@ public class PneumaticsSubsystem extends TSubsystem {
 		compressor.setClosedLoopControl(false);
 	}
 	
+	
+	
 	public void enableCompressor() {
 		compressor.setClosedLoopControl(true);
 	}

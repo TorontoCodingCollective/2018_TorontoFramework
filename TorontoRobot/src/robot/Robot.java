@@ -9,6 +9,7 @@ import robot.oi.GameData;
 import robot.oi.OI;
 import robot.subsystems.ChassisSubsystem;
 import robot.subsystems.PneumaticsSubsystem;
+import robot.subsystems.RampSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,8 +22,10 @@ public class Robot extends IterativeRobot {
 
 	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
 	public static final PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
+	public static final RampSubsystem rampSubsystem = new RampSubsystem();
 	public static OI oi;
-
+	
+	
 	private Command autoCommand;
 	
 	/**
@@ -35,6 +38,7 @@ public class Robot extends IterativeRobot {
 
 		chassisSubsystem.init();
 		pneumaticsSubsystem.init();
+		rampSubsystem.init();
 	}
 
 	/**
@@ -139,5 +143,6 @@ public class Robot extends IterativeRobot {
 	private void updatePeriodic() {
 		chassisSubsystem.updatePeriodic();
 		pneumaticsSubsystem.updatePeriodic();
+		rampSubsystem.updatePeriodic();
 	}
 }
