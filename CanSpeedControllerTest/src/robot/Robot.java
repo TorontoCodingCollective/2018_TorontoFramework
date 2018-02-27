@@ -1,10 +1,13 @@
 package robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.torontocodingcollective.sensors.encoder.TEncoder;
+import com.torontocodingcollective.speedcontroller.TCanSpeedController;
+import com.torontocodingcollective.speedcontroller.TCanSpeedControllerType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This is a demo program showing the use of the RobotDrive class. The
@@ -27,13 +30,21 @@ public class Robot extends SampleRobot {
 
 	Joystick driverController = new Joystick(0);
 
-	TalonSRX canTalon = new TalonSRX(0);
+	TCanSpeedController canTalon4 = new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, 4);
+	TCanSpeedController canVictor5 = new TCanSpeedController(TCanSpeedControllerType.VICTOR_SPX, 4);
+	TCanSpeedController canTalon0 = new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, 0);
+	TCanSpeedController canTalon2 = new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, 2);
+	TCanSpeedController canTalon3 = new TCanSpeedController(TCanSpeedControllerType.TALON_SRX, 3);
+	TEncoder encoder = canTalon4.getEncoder();
+	
+	Solenoid solenoid = new Solenoid(0);
 	
 	public Robot() {
 	}
 
 	@Override
 	public void robotInit() {
+		solenoid.set(true);
 	}
 
 	@Override
@@ -46,7 +57,25 @@ public class Robot extends SampleRobot {
 	@Override
 	public void operatorControl() {
 		while (true) {
-			canTalon.set(ControlMode.PercentOutput, -driverController.getRawAxis(1));
+			canTalon4.set(-driverController.getRawAxis(1));
+			SmartDashboard.putNumber("Motor Setpoint", canTalon4.get());
+			SmartDashboard.putNumber("Motor Setpoint", canTalon0.get());
+			SmartDashboard.putNumber("Encoder", encoder.get());
+			
+			if (driverController.getRawButton(5)) {
+				solenoid.set(false);
+				
+			}
+			else {
+				solenoid.set(true);
+			}
+			
+			try {
+				this.wait(100);
+			}
+			catch (Exception e) {
+				System.out.println("Wait Failed");
+			}
 		}
 	}
 
